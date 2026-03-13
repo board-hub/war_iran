@@ -1,0 +1,2958 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Iran War Dashboard - Operation Epic Fury / Strait of Hormuz Crisis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e17;
+    --bg2: #111827;
+    --bg3: #1a2236;
+    --border: #2a3452;
+    --text: #e2e8f0;
+    --text2: #94a3b8;
+    --green: #22c55e;
+    --green-bg: rgba(34,197,94,0.12);
+    --red: #ef4444;
+    --red-bg: rgba(239,68,68,0.12);
+    --blue: #3b82f6;
+    --blue-bg: rgba(59,130,246,0.12);
+    --yellow: #eab308;
+    --yellow-bg: rgba(234,179,8,0.12);
+    --purple: #a855f7;
+    --purple-bg: rgba(168,85,247,0.12);
+    --cyan: #06b6d4;
+    --cyan-bg: rgba(6,182,212,0.12);
+    --orange: #f97316;
+    --orange-bg: rgba(249,115,22,0.12);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at 20% 0%, rgba(239,68,68,0.04) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 100%, rgba(6,182,212,0.03) 0%, transparent 50%);
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #1a0a0a, #2a1111, #1a0e17);
+    border-bottom: 2px solid var(--red);
+    padding: 24px 30px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 50px,
+      rgba(239,68,68,0.03) 50px,
+      rgba(239,68,68,0.03) 51px
+    );
+  }
+  .header-content {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .header-left { display:flex; align-items:center; gap:20px; }
+  .war-badge {
+    background: var(--red-bg);
+    border: 2px solid var(--red);
+    color: var(--red);
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+    animation: pulse-red 2s infinite;
+    text-shadow: 0 0 8px rgba(239,68,68,0.5);
+  }
+  @keyframes pulse-red {
+    0%, 100% { box-shadow: 0 0 5px rgba(239,68,68,0.3); }
+    50% { box-shadow: 0 0 20px rgba(239,68,68,0.6); }
+  }
+  .header-title h1 {
+    font-size: 22px;
+    font-weight: 800;
+    background: linear-gradient(90deg, var(--red), var(--orange));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .header-title span { color: var(--text2); font-size: 12px; }
+  .header-right { text-align:right; }
+  .day-counter {
+    font-size: 42px;
+    font-weight: 900;
+    color: var(--red);
+    font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+    line-height: 1;
+    text-shadow: 0 0 20px rgba(239,68,68,0.4);
+  }
+  .day-label { font-size: 12px; color: var(--text2); text-transform: uppercase; letter-spacing: 2px; }
+  .last-update { color: var(--text2); font-size: 11px; margin-top: 4px; }
+
+  /* GRID */
+  .dashboard {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    padding: 20px 30px;
+    max-width: 1920px;
+    margin: 0 auto;
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .card:hover {
+    border-color: rgba(148,163,184,0.25);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+  }
+  .card-header {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .card-title {
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text2);
+  }
+  .card-badge {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+  .card-body { padding: 18px; }
+  .full-width { grid-column: 1 / -1; }
+  .two-cols { grid-column: span 2; }
+
+  /* METRIC GRID */
+  .metric-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+  }
+  .metric-item {
+    text-align: center;
+    padding: 14px 10px;
+    background: var(--bg);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+  .metric-label { font-size: 10px; color: var(--text2); text-transform: uppercase; letter-spacing: 0.5px; }
+  .metric-value {
+    font-size: 24px;
+    font-weight: 800;
+    font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+    margin-top: 4px;
+  }
+  .metric-sub { font-size: 11px; color: var(--text2); margin-top: 2px; }
+  .metric-red .metric-value { color: var(--red); }
+  .metric-green .metric-value { color: var(--green); }
+  .metric-orange .metric-value { color: var(--orange); }
+  .metric-yellow .metric-value { color: var(--yellow); }
+  .metric-blue .metric-value { color: var(--blue); }
+  .metric-cyan .metric-value { color: var(--cyan); }
+  .metric-purple .metric-value { color: var(--purple); }
+
+  /* STATUS BADGES */
+  .positive-bg { background: var(--green-bg); color: var(--green); }
+  .negative-bg { background: var(--red-bg); color: var(--red); }
+  .warning-bg { background: var(--yellow-bg); color: var(--yellow); }
+  .info-bg { background: var(--blue-bg); color: var(--blue); }
+  .cyan-bg { background: var(--cyan-bg); color: var(--cyan); }
+  .orange-bg { background: var(--orange-bg); color: var(--orange); }
+  .purple-bg { background: var(--purple-bg); color: var(--purple); }
+
+  /* TABLES */
+  .data-table { width: 100%; border-collapse: collapse; }
+  .data-table th {
+    text-align: left;
+    font-size: 11px;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .data-table td {
+    padding: 8px 12px;
+    font-size: 13px;
+    border-bottom: 1px solid rgba(42,52,82,0.5);
+  }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover { background: rgba(59,130,246,0.05); }
+
+  /* TIMELINE */
+  .timeline { position: relative; padding-left: 24px; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, var(--red), var(--orange), var(--yellow));
+  }
+  .tl-item {
+    position: relative;
+    margin-bottom: 16px;
+    padding: 12px 14px;
+    background: var(--bg);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: -20px;
+    top: 16px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid var(--red);
+    background: var(--bg2);
+  }
+  .tl-item.critical::before { background: var(--red); box-shadow: 0 0 8px rgba(239,68,68,0.5); }
+  .tl-item.major::before { background: var(--orange); border-color: var(--orange); }
+  .tl-item.diplomatic::before { background: var(--blue); border-color: var(--blue); }
+  .tl-item.economic::before { background: var(--yellow); border-color: var(--yellow); }
+  .tl-item.humanitarian::before { background: var(--purple); border-color: var(--purple); }
+  .tl-day {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--orange);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+  .tl-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .tl-detail { font-size: 12px; color: var(--text2); line-height: 1.6; }
+
+  /* PROGRESS BARS */
+  .progress-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .progress-label {
+    font-size: 12px;
+    color: var(--text2);
+    min-width: 140px;
+  }
+  .progress-bar-bg {
+    flex: 1;
+    height: 12px;
+    background: var(--bg);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 6px;
+    transition: width 0.5s;
+  }
+  .progress-value {
+    font-size: 12px;
+    font-weight: 700;
+    font-family: monospace;
+    min-width: 50px;
+    text-align: right;
+  }
+
+  /* OIL CHART (CSS bars) */
+  .oil-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    height: 180px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 10px;
+  }
+  .oil-bar-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    justify-content: flex-end;
+  }
+  .oil-bar {
+    width: 100%;
+    min-width: 20px;
+    border-radius: 4px 4px 0 0;
+    position: relative;
+    transition: height 0.3s;
+  }
+  .oil-bar-label {
+    font-size: 9px;
+    color: var(--text2);
+    margin-top: 6px;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .oil-bar-value {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+    text-align: center;
+  }
+
+  /* INFO CALLOUT */
+  .callout {
+    font-size: 11px;
+    padding: 10px 12px;
+    background: var(--bg);
+    border-radius: 6px;
+    margin-top: 8px;
+    line-height: 1.6;
+  }
+  .callout-red { border-left: 3px solid var(--red); }
+  .callout-orange { border-left: 3px solid var(--orange); }
+  .callout-yellow { border-left: 3px solid var(--yellow); }
+  .callout-blue { border-left: 3px solid var(--blue); }
+  .callout-green { border-left: 3px solid var(--green); }
+  .callout-cyan { border-left: 3px solid var(--cyan); }
+  .callout-purple { border-left: 3px solid var(--purple); }
+  .callout strong { margin-right: 4px; }
+
+  /* COUNTRY FLAGS (emoji + name) */
+  .country-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 8px;
+  }
+  .country-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    background: var(--bg);
+    border-radius: 6px;
+    border: 1px solid var(--border);
+  }
+  .country-flag { font-size: 22px; }
+  .country-name { font-size: 12px; font-weight: 700; color: var(--text); }
+  .country-role { font-size: 11px; color: var(--text2); }
+
+  /* SCROLLABLE CARD */
+  .scrollable { max-height: 600px; overflow-y: auto; }
+  .scrollable::-webkit-scrollbar { width: 6px; }
+  .scrollable::-webkit-scrollbar-track { background: var(--bg2); }
+  .scrollable::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* TABS */
+  .tab-bar {
+    display: flex;
+    gap: 4px;
+    padding: 8px 18px 0;
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+  }
+  .tab-btn {
+    padding: 8px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text2);
+    background: none;
+    border: none;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--red); border-bottom-color: var(--red); }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* BLINK */
+  @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+  .blink { animation: blink 1.5s infinite; }
+
+  /* SCAN LINE EFFECT on header */
+  .header::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.05) 2px,
+      rgba(0,0,0,0.05) 4px
+    );
+    pointer-events: none;
+  }
+
+  /* METRIC ITEM hover glow */
+  .metric-item {
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .metric-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  }
+  .metric-red:hover { box-shadow: 0 4px 16px rgba(239,68,68,0.2); }
+  .metric-green:hover { box-shadow: 0 4px 16px rgba(34,197,94,0.2); }
+  .metric-orange:hover { box-shadow: 0 4px 16px rgba(249,115,22,0.2); }
+  .metric-cyan:hover { box-shadow: 0 4px 16px rgba(6,182,212,0.2); }
+  .metric-blue:hover { box-shadow: 0 4px 16px rgba(59,130,246,0.2); }
+  .metric-yellow:hover { box-shadow: 0 4px 16px rgba(234,179,8,0.2); }
+  .metric-purple:hover { box-shadow: 0 4px 16px rgba(168,85,247,0.2); }
+
+  /* CALLOUT hover */
+  .callout { transition: border-left-width 0.15s; }
+  .callout:hover { border-left-width: 5px; }
+
+  /* PROGRESS BAR shimmer */
+  @keyframes shimmer {
+    0% { background-position: -200px 0; }
+    100% { background-position: 200px 0; }
+  }
+  .progress-bar-fill {
+    background-size: 200px 100%;
+    animation: shimmer 3s infinite linear;
+  }
+
+  /* ===== STICKY NAV ===== */
+  .sticky-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,14,23,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 30px;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .sticky-nav::-webkit-scrollbar { display: none; }
+  .sticky-nav a {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 10px 14px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text2);
+    text-decoration: none;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+    letter-spacing: 0.3px;
+  }
+  .sticky-nav a:hover { color: var(--text); border-bottom-color: var(--text2); }
+  .sticky-nav a.active { color: var(--red); border-bottom-color: var(--red); }
+  .sticky-nav .nav-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    display: inline-block; flex-shrink: 0;
+  }
+
+  /* ===== BREAKING TICKER ===== */
+  .ticker-wrap {
+    background: linear-gradient(90deg, rgba(239,68,68,0.1), rgba(249,115,22,0.08));
+    border-bottom: 1px solid rgba(239,68,68,0.2);
+    overflow: hidden;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+  .ticker-label {
+    background: var(--red);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 4px 12px;
+    letter-spacing: 1px;
+    z-index: 2;
+    flex-shrink: 0;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .ticker-track {
+    display: flex;
+    animation: ticker-scroll 60s linear infinite;
+    white-space: nowrap;
+  }
+  .ticker-track:hover { animation-play-state: paused; }
+  .ticker-item {
+    font-size: 11px;
+    color: var(--text2);
+    padding: 0 24px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .ticker-item strong { color: var(--text); }
+  .ticker-sep { color: var(--border); }
+  @keyframes ticker-scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* ===== STICKY MINI HEADER ===== */
+  .mini-header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 200;
+    background: rgba(10,14,23,0.97);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--red);
+    padding: 6px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transform: translateY(-100%);
+    transition: transform 0.3s;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.5);
+  }
+  .mini-header.visible { transform: translateY(0); }
+  .mini-header .mini-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--red);
+    letter-spacing: 1px;
+  }
+  .mini-header .mini-metrics {
+    display: flex;
+    gap: 20px;
+    font-size: 11px;
+  }
+  .mini-header .mini-m {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .mini-header .mini-m .ml { color: var(--text2); }
+  .mini-header .mini-m .mv { font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+
+  /* ===== COLLAPSIBLE CARDS ===== */
+  .card-header { cursor: pointer; user-select: none; position: relative; }
+  .card-header::after {
+    content: '\\25B2';
+    font-size: 10px;
+    color: var(--text2);
+    margin-left: 8px;
+    transition: transform 0.3s;
+    display: inline-block;
+  }
+  .card-header.collapsed::after { transform: rotate(180deg); }
+  .card-body { transition: max-height 0.4s ease, opacity 0.3s, padding 0.3s; overflow: hidden; }
+  .card-body.collapsed-body {
+    max-height: 0 !important;
+    opacity: 0;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  /* ===== OIL BAR TOOLTIPS ===== */
+  .oil-bar-wrapper { position: relative; cursor: pointer; }
+  .oil-bar-wrapper .oil-tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-4px);
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 10px;
+    color: var(--text);
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+    z-index: 10;
+    line-height: 1.4;
+  }
+  .oil-bar-wrapper:hover .oil-tooltip { opacity: 1; }
+
+  /* ===== SPARKLINE ===== */
+  .sparkline-wrap { margin-top: 6px; height: 20px; }
+  .sparkline-wrap svg { width: 100%; height: 20px; }
+
+  /* ===== FRESHNESS ===== */
+  .freshness {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 9px;
+    color: var(--text2);
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .freshness-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .fresh-green { background: var(--green); box-shadow: 0 0 4px var(--green); }
+  .fresh-yellow { background: var(--yellow); }
+  .fresh-red { background: var(--red); }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 1200px) {
+    .dashboard { grid-template-columns: 1fr 1fr; }
+    .two-cols { grid-column: span 2; }
+  }
+  @media (max-width: 768px) {
+    .dashboard { grid-template-columns: 1fr; padding: 12px; }
+    .two-cols, .full-width { grid-column: 1 / -1; }
+    .header-content { flex-direction: column; text-align: center; }
+    .oil-chart { height: 140px; }
+    .sticky-nav { padding: 0 12px; }
+    .mini-header .mini-metrics { gap: 10px; font-size: 10px; }
+    .ticker-wrap { height: 28px; }
+  }
+
+  /* FOOTER */
+  .footer {
+    text-align: center;
+    padding: 20px;
+    color: var(--text2);
+    font-size: 11px;
+    border-top: 1px solid var(--border);
+  }
+  /* MAP OVERRIDES */
+  #conflict-map { z-index: 1; }
+  .leaflet-popup-content-wrapper {
+    background: var(--bg2) !important;
+    color: var(--text) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 8px !important;
+    font-family: inherit !important;
+  }
+  .leaflet-popup-tip { background: var(--bg2) !important; }
+  .leaflet-popup-content { font-size: 12px !important; line-height: 1.5 !important; margin: 10px 14px !important; }
+  .leaflet-popup-content strong { color: var(--text); }
+  .leaflet-popup-content .pop-red { color: var(--red); font-weight: 700; }
+  .leaflet-popup-content .pop-orange { color: var(--orange); font-weight: 700; }
+  .leaflet-popup-content .pop-yellow { color: var(--yellow); font-weight: 700; }
+  .leaflet-popup-content .pop-blue { color: var(--blue); font-weight: 700; }
+  .leaflet-popup-content .pop-green { color: var(--green); font-weight: 700; }
+  .leaflet-popup-content .pop-purple { color: var(--purple); font-weight: 700; }
+  .leaflet-popup-content .pop-cyan { color: var(--cyan); font-weight: 700; }
+  .leaflet-popup-close-button { color: var(--text2) !important; }
+  .leaflet-control-zoom a {
+    background: var(--bg2) !important;
+    color: var(--text) !important;
+    border-color: var(--border) !important;
+  }
+  .leaflet-control-attribution { display: none !important; }
+  .leaflet-control-layers {
+    background: rgba(17,24,39,0.95) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 8px !important;
+    color: var(--text) !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4) !important;
+  }
+  .leaflet-control-layers label { color: var(--text) !important; font-size: 11px !important; }
+  .leaflet-control-layers-toggle {
+    background-color: var(--bg2) !important;
+    border: 1px solid var(--border) !important;
+    width: 34px !important; height: 34px !important;
+  }
+  .leaflet-control-layers-separator { border-top-color: var(--border) !important; }
+</style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+
+<!-- ===== MINI HEADER (appears on scroll) ===== -->
+<div class="mini-header" id="miniHeader">
+  <div class="mini-badge">JOUR 13 &mdash; EPIC FURY</div>
+  <div class="mini-metrics">
+    <div class="mini-m"><span class="ml">Brent</span> <span class="mv" style="color:var(--red);">$101.20</span></div>
+    <div class="mini-m"><span class="ml">Ormuz</span> <span class="mv" style="color:var(--red);">97%</span></div>
+    <div class="mini-m"><span class="ml">VIX</span> <span class="mv" style="color:var(--orange);">27.29</span></div>
+    <div class="mini-m"><span class="ml">Cibles</span> <span class="mv" style="color:var(--cyan);">6,000+</span></div>
+    <div class="mini-m"><span class="ml">Civils</span> <span class="mv" style="color:var(--red);">1,348+</span></div>
+  </div>
+</div>
+
+<!-- ===== HEADER ===== -->
+<div class="header">
+  <div class="header-content">
+    <div class="header-left">
+      <div class="war-badge">OPERATION EPIC FURY</div>
+      <div class="header-title">
+        <h1>Iran War &amp; Strait of Hormuz Crisis</h1>
+        <span>US-Israel vs Iran &mdash; 28 fev 2026 &ndash; en cours | Suivi complet du conflit</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="day-label">Jour de guerre</div>
+      <div class="day-counter">13</div>
+      <div class="last-update">MAJ: 12 mars 2026, 16:00 EST</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== BREAKING TICKER ===== -->
+<div class="ticker-wrap">
+  <div class="ticker-label">BREAKING</div>
+  <div class="ticker-track" id="tickerTrack">
+    <span class="ticker-item"><strong style="color:var(--red);">6 navires attaques J13</strong> — Safesea Vishnu (1 mort), Zefyros en feu, Mayuree Naree (3 disparus)</span>
+    <span class="ticker-sep">|</span>
+    <span class="ticker-item"><strong style="color:var(--red);">IDF frappe Parchin/Taleghan</strong> — complexe nucleaire AMAD, vague de frappes a grande echelle</span>
+    <span class="ticker-sep">|</span>
+    <span class="ticker-item"><strong style="color:var(--orange);">Brent $101.20 (+10%)</strong> — repasse au-dessus de $100 apres Ras Tanura en feu</span>
+    <span class="ticker-sep">|</span>
+    <span class="ticker-item"><strong style="color:var(--yellow);">Iran pose 3 conditions</strong> — droits, reparations, garanties internationales</span>
+    <span class="ticker-sep">|</span>
+    <span class="ticker-item"><strong style="color:var(--cyan);">Mojtaba Khamenei</strong> — 1er discours, Ormuz = "levier de blocus"</span>
+    <span class="ticker-sep">|</span>
+    <span class="ticker-item"><strong style="color:var(--purple);">Iron Dome ~50%</strong> — sature par salve 200+ rockets Hezbollah (J11)</span>
+    <span class="ticker-sep">|</span>
+    <!-- duplicate for seamless scroll -->
+    <span class="ticker-item"><strong style="color:var(--red);">6 navires attaques J13</strong> — Safesea Vishnu (1 mort), Zefyros en feu, Mayuree Naree (3 disparus)</span>
+    <span class="ticker-sep">|</span>
+    <span class="ticker-item"><strong style="color:var(--red);">IDF frappe Parchin/Taleghan</strong> — complexe nucleaire AMAD, vague de frappes a grande echelle</span>
+    <span class="ticker-sep">|</span>
+    <span class="ticker-item"><strong style="color:var(--orange);">Brent $101.20 (+10%)</strong> — repasse au-dessus de $100 apres Ras Tanura en feu</span>
+    <span class="ticker-sep">|</span>
+    <span class="ticker-item"><strong style="color:var(--yellow);">Iran pose 3 conditions</strong> — droits, reparations, garanties internationales</span>
+    <span class="ticker-sep">|</span>
+    <span class="ticker-item"><strong style="color:var(--cyan);">Mojtaba Khamenei</strong> — 1er discours, Ormuz = "levier de blocus"</span>
+    <span class="ticker-sep">|</span>
+    <span class="ticker-item"><strong style="color:var(--purple);">Iron Dome ~50%</strong> — sature par salve 200+ rockets Hezbollah (J11)</span>
+    <span class="ticker-sep">|</span>
+  </div>
+</div>
+
+<!-- ===== STICKY NAV ===== -->
+<nav class="sticky-nav" id="stickyNav">
+  <a href="#sec-metrics"><span class="nav-dot" style="background:var(--red);"></span>Metriques</a>
+  <a href="#sec-map"><span class="nav-dot" style="background:var(--blue);"></span>Carte</a>
+  <a href="#sec-oil"><span class="nav-dot" style="background:var(--orange);"></span>Petrole</a>
+  <a href="#sec-hormuz"><span class="nav-dot" style="background:var(--red);"></span>Ormuz</a>
+  <a href="#sec-degrad"><span class="nav-dot" style="background:var(--green);"></span>Degradation</a>
+  <a href="#sec-losses"><span class="nav-dot" style="background:var(--yellow);"></span>Pertes</a>
+  <a href="#sec-timeline"><span class="nav-dot" style="background:var(--orange);"></span>Timeline</a>
+  <a href="#sec-countries"><span class="nav-dot" style="background:var(--blue);"></span>Pays</a>
+  <a href="#sec-diplo"><span class="nav-dot" style="background:var(--purple);"></span>Diplo</a>
+  <a href="#sec-human"><span class="nav-dot" style="background:var(--purple);"></span>Humanitaire</a>
+  <a href="#sec-attacks"><span class="nav-dot" style="background:var(--orange);"></span>Attaques</a>
+  <a href="#sec-cost"><span class="nav-dot" style="background:var(--yellow);"></span>Cout</a>
+  <a href="#sec-economy"><span class="nav-dot" style="background:var(--red);"></span>Economie</a>
+  <a href="#sec-cyber"><span class="nav-dot" style="background:var(--cyan);"></span>Cyber</a>
+  <a href="#sec-events"><span class="nav-dot" style="background:var(--orange);"></span>Marquants</a>
+  <a href="#sec-iran-losses"><span class="nav-dot" style="background:var(--red);"></span>Pertes Iran</a>
+  <a href="#sec-watch"><span class="nav-dot" style="background:var(--yellow);"></span>Surveiller</a>
+</nav>
+
+<!-- ===== DASHBOARD GRID ===== -->
+<div class="dashboard">
+
+  <!-- ===== KEY METRICS ===== -->
+  <div class="card full-width" id="sec-metrics">
+    <div class="card-header">
+      <span class="card-title">Indicateurs Cles du Conflit</span>
+      <span class="freshness"><span class="freshness-dot fresh-green"></span>J13 16:00</span>
+      <span class="card-badge negative-bg blink">EN COURS</span>
+    </div>
+    <div class="card-body">
+      <div class="metric-grid">
+        <div class="metric-item metric-red">
+          <div class="metric-label">Brent Crude</div>
+          <div class="metric-value">$101.20</div>
+          <div class="metric-sub">+10% jour | +42% vs pre-guerre $71 | High $126</div>
+          <div class="sparkline-wrap" id="spark-brent"></div>
+        </div>
+        <div class="metric-item metric-orange">
+          <div class="metric-label">Gaz EU (TTF)</div>
+          <div class="metric-value">~49.85</div>
+          <div class="metric-sub">EUR/MWh | +54% vs pre-crise</div>
+        </div>
+        <div class="metric-item metric-green">
+          <div class="metric-label">Or (Gold)</div>
+          <div class="metric-value">$5,079</div>
+          <div class="metric-sub">-1.86% jour | +77% YoY | Safe haven</div>
+          <div class="sparkline-wrap" id="spark-gold"></div>
+        </div>
+        <div class="metric-item metric-red">
+          <div class="metric-label">Ormuz Status</div>
+          <div class="metric-value">97%</div>
+          <div class="metric-sub">BLOQUE | 280+ navires pieges | MINES</div>
+        </div>
+        <div class="metric-item metric-orange">
+          <div class="metric-label">VIX (Peur)</div>
+          <div class="metric-value">27.29</div>
+          <div class="metric-sub">+12.6% jour | S&amp;P ~6,660 (-1.52%) | vers 30 = panique</div>
+          <div class="sparkline-wrap" id="spark-vix"></div>
+        </div>
+        <div class="metric-item metric-red">
+          <div class="metric-label">Morts civils Iran</div>
+          <div class="metric-value">1,348+</div>
+          <div class="metric-sub">Civils selon Iran | 4,300+ total (Hengaw)</div>
+        </div>
+        <div class="metric-item metric-blue">
+          <div class="metric-label">Morts US</div>
+          <div class="metric-value">7</div>
+          <div class="metric-sub">6 Kuwait + 1 Arabie | 140+ blesses (8 graves)</div>
+        </div>
+        <div class="metric-item metric-yellow">
+          <div class="metric-label">Deplaces</div>
+          <div class="metric-value">3.2M</div>
+          <div class="metric-sub">Iran (UNHCR) | +800K Liban | 750K+ region</div>
+        </div>
+        <div class="metric-item metric-cyan">
+          <div class="metric-label">Cibles frappees (US+IL)</div>
+          <div class="metric-value">6,000+</div>
+          <div class="metric-sub">CENTCOM (12 mar) | 30/31 provinces | IDF: 2,600 sorties</div>
+        </div>
+        <div class="metric-item metric-red">
+          <div class="metric-label">Navires Iran coules</div>
+          <div class="metric-value">60+</div>
+          <div class="metric-sub">Classe Soleimani eliminee | IRIS Dena torpillee | 11 MQ-9 perdus US</div>
+        </div>
+        <div class="metric-item metric-purple">
+          <div class="metric-label">Incidents cyber</div>
+          <div class="metric-value">150+</div>
+          <div class="metric-sub">DDoS, defacements, APT | 48h</div>
+        </div>
+        <div class="metric-item metric-yellow">
+          <div class="metric-label">SPR Libere</div>
+          <div class="metric-value">400M</div>
+          <div class="metric-sub">Barils | IEA record historique</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CONFLICT MAP ===== -->
+  <div class="card full-width" id="sec-map">
+    <div class="card-header" data-no-collapse="true">
+      <span class="card-title">Carte du Conflit &mdash; Operation Epic Fury</span>
+      <span class="card-badge negative-bg blink">13 JOURS</span>
+    </div>
+    <div class="card-body" style="padding:0;">
+      <div id="conflict-map" style="height:720px;border-radius:0 0 12px 12px;"></div>
+      <div style="padding:12px 18px;display:flex;flex-wrap:wrap;gap:12px;font-size:11px;border-top:1px solid var(--border);">
+        <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#ef4444;margin-right:4px;"></span>Frappes US/Israel</span>
+        <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#f97316;margin-right:4px;"></span>Ripostes Iran / Attaques</span>
+        <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#eab308;margin-right:4px;"></span>Navires attaques / Mines</span>
+        <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#a855f7;margin-right:4px;"></span>Sites nucleaires</span>
+        <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#3b82f6;margin-right:4px;"></span>Bases US / Coalition</span>
+        <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#22c55e;margin-right:4px;"></span>Bypass / Pipelines</span>
+        <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#06b6d4;margin-right:4px;"></span>Coalition navale</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== OIL PRICE TRACKER ===== -->
+  <div class="card two-cols" id="sec-oil">
+    <div class="card-header">
+      <span class="card-title">Brent Crude &mdash; Evolution depuis le 28 fev</span>
+      <span class="freshness"><span class="freshness-dot fresh-green"></span>J13 16:00</span>
+      <span class="card-badge negative-bg">VOLATILITE EXTREME</span>
+    </div>
+    <div class="card-body">
+      <div class="oil-chart">
+        <div class="oil-bar-wrapper">
+          <div class="oil-bar-value">$71</div>
+          <div class="oil-bar" style="height:15%;background:var(--text2);"></div>
+          <div class="oil-bar-label">27 fev<br>Pre-guerre</div>
+        </div>
+        <div class="oil-bar-wrapper">
+          <div class="oil-bar-value">$72</div>
+          <div class="oil-bar" style="height:17%;background:var(--orange);"></div>
+          <div class="oil-bar-label">28 fev<br>J1</div>
+        </div>
+        <div class="oil-bar-wrapper">
+          <div class="oil-bar-value">~$78</div>
+          <div class="oil-bar" style="height:28%;background:var(--orange);"></div>
+          <div class="oil-bar-label">1 mar<br>J2</div>
+        </div>
+        <div class="oil-bar-wrapper">
+          <div class="oil-bar-value">~$83</div>
+          <div class="oil-bar" style="height:38%;background:var(--orange);"></div>
+          <div class="oil-bar-label">2 mar<br>J3</div>
+        </div>
+        <div class="oil-bar-wrapper">
+          <div class="oil-bar-value">~$87</div>
+          <div class="oil-bar" style="height:44%;background:var(--orange);"></div>
+          <div class="oil-bar-label">3 mar<br>J4</div>
+        </div>
+        <div class="oil-bar-wrapper">
+          <div class="oil-bar-value">~$90</div>
+          <div class="oil-bar" style="height:50%;background:var(--red);"></div>
+          <div class="oil-bar-label">4 mar<br>J5</div>
+        </div>
+        <div class="oil-bar-wrapper">
+          <div class="oil-bar-value">~$93</div>
+          <div class="oil-bar" style="height:55%;background:var(--red);"></div>
+          <div class="oil-bar-label">5 mar<br>J6</div>
+        </div>
+        <div class="oil-bar-wrapper">
+          <div class="oil-bar-value">~$98</div>
+          <div class="oil-bar" style="height:65%;background:var(--red);"></div>
+          <div class="oil-bar-label">6 mar<br>J7</div>
+        </div>
+        <div class="oil-bar-wrapper">
+          <div class="oil-bar-value">~$105</div>
+          <div class="oil-bar" style="height:78%;background:var(--red);"></div>
+          <div class="oil-bar-label">7 mar<br>J8</div>
+        </div>
+        <div class="oil-bar-wrapper">
+          <div class="oil-bar-value" style="color:var(--red);font-weight:900;">$119</div>
+          <div class="oil-bar" style="height:100%;background:linear-gradient(180deg,var(--red),var(--orange));box-shadow:0 0 10px rgba(239,68,68,0.4);"></div>
+          <div class="oil-bar-label" style="color:var(--red);font-weight:700;">8 mar<br>J9 HIGH</div>
+        </div>
+        <div class="oil-bar-wrapper">
+          <div class="oil-bar-value">$103</div>
+          <div class="oil-bar" style="height:75%;background:var(--orange);"></div>
+          <div class="oil-bar-label">9 mar<br>J10</div>
+        </div>
+        <div class="oil-bar-wrapper">
+          <div class="oil-bar-value">$87.80</div>
+          <div class="oil-bar" style="height:44%;background:var(--green);"></div>
+          <div class="oil-bar-label" style="color:var(--green);">10 mar<br>J11 -11%</div>
+        </div>
+        <div class="oil-bar-wrapper">
+          <div class="oil-bar-value">$91.98</div>
+          <div class="oil-bar" style="height:52%;background:var(--yellow);"></div>
+          <div class="oil-bar-label">11 mar<br>J12</div>
+        </div>
+        <div class="oil-bar-wrapper">
+          <div class="oil-bar-value" style="color:var(--red);font-weight:900;">$101.20</div>
+          <div class="oil-bar" style="height:72%;background:linear-gradient(180deg,var(--red),var(--orange));box-shadow:0 0 8px rgba(239,68,68,0.3);"></div>
+          <div class="oil-bar-label" style="color:var(--red);font-weight:700;">12 mar<br>J13 +10%</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;">
+        <div class="callout callout-red" style="flex:1;min-width:200px;">
+          <strong style="color:var(--red);">PEAK:</strong>
+          <span style="color:var(--text2);">$119.50 intraday (8 mar) &mdash; 1er fois au-dessus de $100 depuis 2022. Depots de carburant Teheran en feu.</span>
+        </div>
+        <div class="callout callout-green" style="flex:1;min-width:200px;">
+          <strong style="color:var(--green);">DROP:</strong>
+          <span style="color:var(--text2);">$87.80 (10 mar, -11.28%) sur "la guerre est finie" de Trump. Rebond $101.20 le 12 mars (+10%) sur 6 navires attaques + Ras Tanura en feu.</span>
+        </div>
+      </div>
+      <div class="callout callout-yellow" style="margin-top:6px;">
+        <strong style="color:var(--yellow);">IMPACT CONSOMMATEUR:</strong>
+        <span style="color:var(--text2);">Essence US: $3.59/gal (+20% vs $2.98 pre-guerre) | +$0.48 en 1 semaine (record du siecle) | Diesel: $4.65/gal (+23%) | CA: $5.20/gal</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== HORMUZ STATUS ===== -->
+  <div class="card" id="sec-hormuz">
+    <div class="card-header">
+      <span class="card-title">Detroit d'Ormuz</span>
+      <span class="freshness"><span class="freshness-dot fresh-green"></span>J13 16:00</span>
+      <span class="card-badge negative-bg blink">BLOQUE + MINE</span>
+    </div>
+    <div class="card-body">
+      <div style="text-align:center;margin-bottom:16px;">
+        <div style="font-size:48px;font-weight:900;color:var(--red);font-family:monospace;">97%</div>
+        <div style="font-size:12px;color:var(--text2);text-transform:uppercase;">Bloque</div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;justify-content:space-between;padding:8px 10px;background:var(--bg);border-radius:4px;">
+          <span style="font-size:12px;color:var(--text2);">Transit normal</span>
+          <span style="font-size:12px;font-family:monospace;color:var(--text);">~20M bpd</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:8px 10px;background:var(--bg);border-radius:4px;">
+          <span style="font-size:12px;color:var(--text2);">Crude bloque</span>
+          <span style="font-size:12px;font-family:monospace;color:var(--red);">~15M bpd</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:8px 10px;background:var(--bg);border-radius:4px;">
+          <span style="font-size:12px;color:var(--text2);">Produits raffines bloques</span>
+          <span style="font-size:12px;font-family:monospace;color:var(--red);">~4.5M bpd</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:8px 10px;background:var(--bg);border-radius:4px;">
+          <span style="font-size:12px;color:var(--text2);">Navires pieges</span>
+          <span style="font-size:12px;font-family:monospace;color:var(--orange);">280+</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:8px 10px;background:var(--bg);border-radius:4px;">
+          <span style="font-size:12px;color:var(--text2);">Navires attaques (total)</span>
+          <span style="font-size:12px;font-family:monospace;color:var(--red);">22+ (6 le 12 mar)</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:8px 10px;background:var(--bg);border-radius:4px;">
+          <span style="font-size:12px;color:var(--text2);">Traffic (9 derniers jours)</span>
+          <span style="font-size:12px;font-family:monospace;color:var(--red);">66 navires seulement (-90%+)</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:8px 10px;background:var(--bg);border-radius:4px;">
+          <span style="font-size:12px;color:var(--text2);">Mines posees</span>
+          <span style="font-size:12px;font-family:monospace;color:var(--red);">Oui (depuis J11) | Stock: 2,000-6,000</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:8px 10px;background:var(--bg);border-radius:4px;">
+          <span style="font-size:12px;color:var(--text2);">GPS Jamming</span>
+          <span style="font-size:12px;font-family:monospace;color:var(--orange);">ACTIF (brouillage detroit)</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:8px 10px;background:var(--bg);border-radius:4px;">
+          <span style="font-size:12px;color:var(--text2);">Poseurs de mines detruits</span>
+          <span style="font-size:12px;font-family:monospace;color:var(--green);">28 (Trump) / 16 (CENTCOM)</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:8px 10px;background:var(--bg);border-radius:4px;">
+          <span style="font-size:12px;color:var(--text2);">Qatar LNG</span>
+          <span style="font-size:12px;font-family:monospace;color:var(--red);">ARRETE</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:8px 10px;background:var(--bg);border-radius:4px;">
+          <span style="font-size:12px;color:var(--text2);">Iraq exports</span>
+          <span style="font-size:12px;font-family:monospace;color:var(--red);">-800K bpd (Basra ferme)</span>
+        </div>
+      </div>
+
+      <div class="callout callout-red" style="margin-top:10px;">
+        <strong style="color:var(--red);">12 MARS (J13):</strong>
+        <span style="color:var(--text2);"><strong>6 navires attaques</strong>: Safesea Vishnu (tanker, 1 mort indien, drone-bateau kamikaze), Zefyros (tanker, en feu), Mayuree Naree (3 disparus, 20 sauves par Oman), ONE Majesty (container Japon), Star Gwyneth, +1 container pres de Jebel Ali UAE. Iraq ferme ses ports petroliers. Escortes Navy pas avant fin mars.</span>
+      </div>
+      <div class="callout callout-orange" style="margin-top:6px;">
+        <strong style="color:var(--orange);">ASSURANCE:</strong>
+        <span style="color:var(--text2);">Primes +1,000%. Assureurs annulent couverture risque-guerre dans le Golfe. Trump: programme reassurance $20B (Chubb/DFC).</span>
+      </div>
+      <div class="callout callout-yellow" style="margin-top:6px;">
+        <strong style="color:var(--yellow);">BLOCUS SELECTIF (J13) &mdash; NON CONFIRME:</strong>
+        <span style="color:var(--text2);">Le 5 mars, Iran annonce: fermeture vise US/Israel/allies occidentaux seulement. <strong>Chine/Russie</strong>: autorisees (geste de gratitude), mais un navire chinois (Source Blessing) frappe malgre tout. Seulement 6 navires chinois en 8 jours. CSIS: "No one, not even Beijing, getting through." <strong>Inde</strong>: Source indienne dit a Reuters que l'Iran autorisera les tankers indiens (discussions Jaishankar-Araghchi). <strong>Iran NIE</strong>. MEA indien: "premature." Vice-FM iranien: "certains pays nous ont parle... nous avons coopere" (sans nommer l'Inde). 1 tanker arrive a Mumbai avec brut saoudien = passage de facto, mais aucune "exemption" formelle confirmee.</span>
+      </div>
+      <div class="callout callout-cyan" style="margin-top:6px;">
+        <strong style="color:var(--cyan);">BYPASS PIPELINES:</strong>
+        <span style="color:var(--text2);">Deficit reel: <strong>11-16M bpd</strong> (Citigroup), pas 20M, car 3.5-5.5M bpd de capacite bypass via pipelines vers Mer Rouge et terminal Fujairah (UAE). L'Inde a diversifie rapidement: 70-75% des importations maintenant hors Ormuz (vs 55% pre-crise).</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== IRAN MILITARY DEGRADATION ===== -->
+  <div class="card two-cols" id="sec-degrad">
+    <div class="card-header">
+      <span class="card-title">Degradation Militaire Iranienne</span>
+      <span class="freshness"><span class="freshness-dot fresh-green"></span>J13</span>
+      <span class="card-badge negative-bg">CAPACITE EN CHUTE</span>
+    </div>
+    <div class="card-body">
+      <div style="margin-bottom:8px;font-size:11px;color:var(--text2);">Estimation de la degradation des capacites iraniennes depuis le 28 fev</div>
+
+      <div class="progress-row" title="~2,410 tires sur stock de ~2,500">
+        <div class="progress-label">Missiles balistiques<br><span style="font-size:9px;color:var(--text2);opacity:0.7;">~2,410/2,500 tires</span></div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" style="width:92%;background:linear-gradient(90deg,var(--green),var(--cyan));"></div>
+        </div>
+        <div class="progress-value" style="color:var(--green);">-92%</div>
+      </div>
+      <div class="progress-row" title="~2,000+ lances, production quasi-arretee">
+        <div class="progress-label">Drones<br><span style="font-size:9px;color:var(--text2);opacity:0.7;">~2,000+ lances</span></div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" style="width:92%;background:linear-gradient(90deg,var(--green),var(--cyan));"></div>
+        </div>
+        <div class="progress-value" style="color:var(--green);">-92%</div>
+      </div>
+      <div class="progress-row" title="60+ navires coules/desactives">
+        <div class="progress-label">Marine (navires)<br><span style="font-size:9px;color:var(--text2);opacity:0.7;">60+ coules</span></div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" style="width:80%;background:linear-gradient(90deg,var(--green),var(--cyan));"></div>
+        </div>
+        <div class="progress-value" style="color:var(--green);">-80%</div>
+      </div>
+      <div class="progress-row">
+        <div class="progress-label">Defense aerienne</div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" style="width:95%;background:linear-gradient(90deg,var(--green),var(--cyan));"></div>
+        </div>
+        <div class="progress-value" style="color:var(--green);">-95%</div>
+      </div>
+      <div class="progress-row">
+        <div class="progress-label">Force aerienne</div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" style="width:85%;background:linear-gradient(90deg,var(--green),var(--cyan));"></div>
+        </div>
+        <div class="progress-value" style="color:var(--green);">-85%</div>
+      </div>
+      <div class="progress-row">
+        <div class="progress-label">Infrastructure IRGC</div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" style="width:90%;background:linear-gradient(90deg,var(--green),var(--cyan));"></div>
+        </div>
+        <div class="progress-value" style="color:var(--green);">-90%</div>
+      </div>
+      <div class="progress-row">
+        <div class="progress-label">Programme nucleaire</div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" style="width:98%;background:linear-gradient(90deg,var(--green),var(--purple));"></div>
+        </div>
+        <div class="progress-value" style="color:var(--green);">-98%</div>
+      </div>
+      <div class="progress-row" title="28 poseurs detruits mais stock mines 2,000-6,000">
+        <div class="progress-label">Vedettes rapides/mines<br><span style="font-size:9px;color:var(--orange);opacity:0.7;">Stock: 2,000-6,000 mines</span></div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" style="width:15%;background:linear-gradient(90deg,var(--yellow),var(--orange));"></div>
+        </div>
+        <div class="progress-value" style="color:var(--orange);">-15%</div>
+      </div>
+      <div class="progress-row">
+        <div class="progress-label">Leadership</div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" style="width:80%;background:linear-gradient(90deg,var(--orange),var(--red));"></div>
+        </div>
+        <div class="progress-value" style="color:var(--orange);">-80%</div>
+      </div>
+      <div class="progress-row">
+        <div class="progress-label">Capacite cyber</div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" style="width:20%;background:linear-gradient(90deg,var(--yellow),var(--orange));"></div>
+        </div>
+        <div class="progress-value" style="color:var(--orange);">-20%</div>
+      </div>
+
+      <div class="callout callout-red" style="margin-top:12px;">
+        <strong style="color:var(--red);">MUNITIONS TIREES (J1-J13):</strong>
+        <span style="color:var(--text2);">~2,410 missiles balistiques + ~2,000+ drones. Taux de tir balistique J13 = <strong>-92% vs J1</strong> (JPost). Stock pre-guerre estime: ~2,500 missiles. Reserve quasi-epuisee. 96% des missiles = missiles balistiques (pas de croisiere confirme).</span>
+      </div>
+      <div class="callout callout-cyan" style="margin-top:6px;">
+        <strong style="color:var(--cyan);">TRUMP (J13):</strong>
+        <span style="color:var(--text2);">"We've won." / "We could take apart their electric capacity within one hour." Cout 6 premiers jours: $11.3B ($1.5B/jour). Impact economique total: $210B (Penn Wharton).</span>
+      </div>
+      <div class="callout callout-purple" style="margin-top:6px;">
+        <strong style="color:var(--purple);">NUCLEAIRE (J13):</strong>
+        <span style="color:var(--text2);">IDF frappe Taleghan/Parchin (programme AMAD). Fordow, Natanz, Esfahan inoperables. ~200 kg uranium enrichi a Isfahan/Natanz. Enrichissement "significativement recule" mais capture necessite troupes au sol.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== COALITION LOSSES ===== -->
+  <div class="card" id="sec-losses">
+    <div class="card-header">
+      <span class="card-title">Pertes US / Coalition</span>
+      <span class="freshness"><span class="freshness-dot fresh-green"></span>J13</span>
+      <span class="card-badge warning-bg">EN HAUSSE</span>
+    </div>
+    <div class="card-body">
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;justify-content:space-between;padding:10px;background:var(--bg);border-radius:6px;border-left:3px solid var(--red);">
+          <span style="font-size:13px;font-weight:600;">Morts US</span>
+          <span style="font-size:13px;font-family:monospace;color:var(--red);font-weight:700;">7</span>
+        </div>
+        <div style="font-size:11px;color:var(--text2);padding:0 10px;">6 tues Kuwait (103e Sustainment Cmd, port Shuaiba, 1 mar) | 1 Arabie Saoudite</div>
+
+        <div style="display:flex;justify-content:space-between;padding:10px;background:var(--bg);border-radius:6px;border-left:3px solid var(--orange);">
+          <span style="font-size:13px;font-weight:600;">Blesses US</span>
+          <span style="font-size:13px;font-family:monospace;color:var(--orange);font-weight:700;">140+</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:10px;background:var(--bg);border-radius:6px;border-left:3px solid var(--yellow);">
+          <span style="font-size:13px;font-weight:600;">F-15E perdus</span>
+          <span style="font-size:13px;font-family:monospace;color:var(--yellow);font-weight:700;">3</span>
+        </div>
+        <div style="font-size:11px;color:var(--text2);padding:0 10px;">Tir ami Koweit &mdash; F/A-18 koweitien abat 3 F-15E. 6 pilotes ejectes sains et saufs.</div>
+
+        <div style="display:flex;justify-content:space-between;padding:10px;background:var(--bg);border-radius:6px;border-left:3px solid var(--blue);">
+          <span style="font-size:13px;font-weight:600;">UAE</span>
+          <span style="font-size:13px;font-family:monospace;color:var(--blue);">6 morts | 268 balistiques, 1,514 drones</span>
+        </div>
+        <div style="font-size:11px;color:var(--text2);padding:0 10px;">241 balistiques intercep., 1,385 drones intercep. (186 detect. par THAAD/Patriot). Drone sur Address Creek Harbour Dubai. 4 blesses pres aeroport. Ruwais refinery (922K bpd) arretee. Ras Tanura en feu.</div>
+
+        <div style="display:flex;justify-content:space-between;padding:10px;background:var(--bg);border-radius:6px;border-left:3px solid var(--orange);">
+          <span style="font-size:13px;font-weight:600;">Bahrein</span>
+          <span style="font-size:13px;font-family:monospace;color:var(--orange);">75 balistiques + 124 drones</span>
+        </div>
+        <div style="font-size:11px;color:var(--text2);padding:0 10px;">QG 5e Flotte touche. Depots Muharraq en feu (J13). Un rapport: 21 US tues (non confirme par Pentagon).</div>
+
+        <div style="display:flex;justify-content:space-between;padding:10px;background:var(--bg);border-radius:6px;border-left:3px solid var(--orange);">
+          <span style="font-size:13px;font-weight:600;">Koweit</span>
+          <span style="font-size:13px;font-family:monospace;color:var(--orange);">97 balistiques + 283 drones</span>
+        </div>
+        <div style="font-size:11px;color:var(--text2);padding:0 10px;">6 US tues centre ops J2. Tir ami 3 F-15E. Ambassade frappee + fermee. Drone sur aeroport civil.</div>
+
+        <div style="display:flex;justify-content:space-between;padding:10px;background:var(--bg);border-radius:6px;border-left:3px solid var(--purple);">
+          <span style="font-size:13px;font-weight:600;">Liban</span>
+          <span style="font-size:13px;font-family:monospace;color:var(--purple);">630+ morts, 800K deplaces</span>
+        </div>
+        <div style="font-size:11px;color:var(--text2);padding:0 10px;">Double-tap Ramlet al-Baida (8 tues, 21 blesses, deplaces dormant sur plage). Dahiyeh frappe. Evacuations sud Zahrani. 83 enfants en 1 semaine.</div>
+
+        <div style="display:flex;justify-content:space-between;padding:10px;background:var(--bg);border-radius:6px;border-left:3px solid var(--cyan);">
+          <span style="font-size:13px;font-weight:600;">Israel</span>
+          <span style="font-size:13px;font-family:monospace;color:var(--cyan);">13 morts, 124+ blesses</span>
+        </div>
+        <div style="font-size:11px;color:var(--text2);padding:0 10px;">14 soldats + 179 civils blesses (24h). Operation conjointe IRGC-Hezbollah: 10 balistiques multi-ogives sur Tel Aviv.</div>
+      </div>
+
+      <div class="callout callout-orange" style="margin-top:10px;">
+        <strong style="color:var(--orange);">IRIS DENA:</strong>
+        <span style="color:var(--text2);">USS Charlotte (sous-marin) torpille la fregate iranienne au large du Sri Lanka. 87+ tues, 61 disparus. 1er tir de torpille US contre un navire depuis WW2.</span>
+      </div>
+      <div class="callout callout-yellow" style="margin-top:6px;">
+        <strong style="color:var(--yellow);">PERTES MATERIELLES US:</strong>
+        <span style="color:var(--text2);">11 MQ-9 Reaper perdus (AA + pannes). 3 F-15E abattus (tir ami Koweit). F-35: 1er kill air-air de l'histoire (Yak-130 iranien). Iron Dome Israel: ~50% efficacite le 11 mars (sature par salves 200+ rockets Hezbollah).</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== DAY-BY-DAY TIMELINE ===== -->
+  <div class="card full-width" id="sec-timeline">
+    <div class="card-header">
+      <span class="card-title">Timeline Jour par Jour</span>
+      <span class="card-badge negative-bg">13 JOURS</span>
+    </div>
+    <div class="card-body scrollable" style="max-height:700px;">
+      <div class="timeline">
+
+        <div class="tl-item critical">
+          <div class="tl-day">Jour 1 &mdash; 28 fev (samedi)</div>
+          <div class="tl-title">Operation Epic Fury &mdash; Premiere frappe</div>
+          <div class="tl-detail">
+            <strong style="color:var(--red);">20:38 UTC:</strong> Trump donne l'ordre. ~900 frappes en 12h sur missiles, defenses aeriennes, infrastructures, leadership.<br>
+            <strong style="color:var(--red);">Khamenei assassine:</strong> Frappes israeliennes sur le complexe Leadership House a Teheran. Dizaines d'officiels tues.<br>
+            <strong style="color:var(--orange);">Riposte Iran:</strong> Missiles sur Bahrein (45 missiles, 9 drones sur QG 5e Flotte), Qatar (44 missiles, Al Udeid), Koweit, UAE, Arabie, Irak, Jordanie.<br>
+            <strong style="color:var(--cyan);">Ormuz:</strong> Tanker <em>Skylight</em> frappe (2 morts indiens). Tanker <em>MKD VYOM</em> frappe par drone-bateau (1 mort).
+          </div>
+        </div>
+
+        <div class="tl-item critical">
+          <div class="tl-day">Jour 2 &mdash; 1 mar (dimanche)</div>
+          <div class="tl-title">Iran confirme la mort de Khamenei &mdash; IRGC ferme Ormuz</div>
+          <div class="tl-detail">
+            Media d'etat iraniens confirment le deces. Conseil Interim etabli (Article 111).<br>
+            <strong style="color:var(--red);">IRGC declare officiellement Ormuz FERME</strong> &mdash; menace tout navire.<br>
+            Celebrations dans les rues d'Isfahan, Karaj, Kermanshah, Shiraz.<br>
+            OPEC+ approuve +206K bpd pour avril.
+          </div>
+        </div>
+
+        <div class="tl-item major">
+          <div class="tl-day">Jour 3 &mdash; 2 mar (lundi)</div>
+          <div class="tl-title">Incident tir ami Koweit &mdash; 6 soldats US tues</div>
+          <div class="tl-detail">
+            <strong style="color:var(--yellow);">TIR AMI:</strong> F/A-18 koweitien abat 3 F-15E US. 6 pilotes s'ejectent, tous saufs.<br>
+            Ambassade US au Koweit frappee par missile iranien &mdash; Rubio ordonne sa fermeture.<br>
+            <strong style="color:var(--red);">6 soldats US tues</strong> dans une frappe iranienne sur un centre d'operations au Koweit.<br>
+            Session d'urgence CSNU: Russie et Chine condamnent les frappes.
+          </div>
+        </div>
+
+        <div class="tl-item major">
+          <div class="tl-day">Jour 4 &mdash; 3 mar (mardi)</div>
+          <div class="tl-title">Israel frappe l'Assemblee des Experts &mdash; Decapitation totale</div>
+          <div class="tl-detail">
+            Israel bombe l'Assemblee des Experts en session pour elire un nouveau Supreme Leader.<br>
+            QG IRIB (TV d'etat), Conseil de Securite Nationale, base Min Zadai souterraine &mdash; tous detruits.<br>
+            Aeroport Bushehr frappe, Airbus A319 d'Iran Air detruit.<br>
+            IRGC force l'election de Mojtaba Khamenei en session en ligne.<br>
+            Assureurs maritimes annulent les couvertures risque-guerre.
+          </div>
+        </div>
+
+        <div class="tl-item critical">
+          <div class="tl-day">Jour 5 &mdash; 4 mar (mercredi)</div>
+          <div class="tl-title">Torpillage de l'IRIS Dena &mdash; 1er depuis WW2</div>
+          <div class="tl-detail">
+            <strong style="color:var(--red);">USS Charlotte</strong> (sous-marin classe LA) tire 2 torpilles Mark 48 sur la fregate IRIS Dena au large du Sri Lanka.<br>
+            ~180 a bord (dont fanfare navale). <strong>87+ tues, 61 disparus.</strong><br>
+            1er tir de torpille US coulant un navire de guerre depuis WW2.<br>
+            Aeroport Mehrabad (Teheran) et base aerienne Shiraz frappes.<br>
+            Senat rejette War Powers Resolution 47-53.
+          </div>
+        </div>
+
+        <div class="tl-item major">
+          <div class="tl-day">Jour 6 &mdash; 5 mar (jeudi)</div>
+          <div class="tl-title">Iran en deperdition &mdash; Missiles -90%, Drones -83%</div>
+          <div class="tl-detail">
+            Iran rapporte avoir tire 500+ missiles balistiques et ~2,000 drones depuis J1 (40% Israel, 60% bases US).<br>
+            US ont frappe 5,000+ cibles en Iran.<br>
+            <strong style="color:var(--green);">Taux de tir balistique iranien -90%</strong>, drones -83% vs debut de guerre.<br>
+            30+ navires iraniens coules ou desactives.<br>
+            Houthis menacent ("nos mains sont sur la gachette") mais n'attaquent pas encore.
+          </div>
+        </div>
+
+        <div class="tl-item diplomatic">
+          <div class="tl-day">Jour 7 &mdash; 6 mar (vendredi)</div>
+          <div class="tl-title">Expansion des cibles &mdash; Trump: "l'Iran sera frappe tres fort"</div>
+          <div class="tl-detail">
+            Frappes sur infrastructure de communications strategiques et installations militaires renforcees.<br>
+            Satellite confirme dommages aux noeuds de communication US et radars d'alerte au Golfe.<br>
+            Trump: "Aujourd'hui l'Iran sera frappe tres fort" &mdash; avertit de "destruction complete" de certaines zones.<br>
+            Iran cible ambassade israelienne a Bahrein; Arabie intercepte les missiles.
+          </div>
+        </div>
+
+        <div class="tl-item diplomatic">
+          <div class="tl-day">Jour 8 &mdash; 7 mar (samedi)</div>
+          <div class="tl-title">Aucun signal de cessez-le-feu &mdash; F-14 detruits</div>
+          <div class="tl-detail">
+            Trump aux Republicains: "On n'a pas assez gagne. On avance plus determine que jamais."<br>
+            <strong style="color:var(--red);">Iran FM Araghchi:</strong> "Negocier avec les US ne sera pas sur la table."<br>
+            <strong style="color:var(--red);">Ghalibaf (parlement):</strong> "Certainement, nous ne cherchons pas un cessez-le-feu."<br>
+            Israel frappe 16 avions IRGC a Mehrabad + flotte de F-14 Tomcat a Isfahan.
+          </div>
+        </div>
+
+        <div class="tl-item critical">
+          <div class="tl-day">Jour 9 &mdash; 8 mar (dimanche)</div>
+          <div class="tl-title">Mojtaba Khamenei elu Supreme Leader &mdash; Depots en feu</div>
+          <div class="tl-detail">
+            <strong style="color:var(--orange);">Mojtaba Khamenei</strong> (56 ans, fils) elu "a l'unanimite" par l'Assemblee des Experts.<br>
+            Pied fracture et blessures mineures des frappes precedentes. Pas vu en public.<br>
+            <strong style="color:var(--red);">Israel frappe 4 depots de carburant a Teheran</strong> (Karaj, Shehran, Aghdasiyeh + raffinerie). Incendies massifs, riviere de feu.<br>
+            <strong style="color:var(--red);">Brent: spike a $119.50 intraday</strong> &mdash; 1ere fois au-dessus de $100 depuis 2022.
+          </div>
+        </div>
+
+        <div class="tl-item economic">
+          <div class="tl-day">Jour 10 &mdash; 9 mar (lundi)</div>
+          <div class="tl-title">Trump: "la guerre est tres complete" &mdash; Pluie toxique sur Teheran</div>
+          <div class="tl-detail">
+            Trump: "I think the war is very complete, pretty much." Puis: "We haven't won enough."<br>
+            <strong style="color:var(--purple);">Pluie noire toxique</strong> sur Teheran (fumee des depots + pluie = pluie acide). SO2, HAP. Alerte OMS.<br>
+            Brent: $103.47 (close). Qatar: 17 missiles balistiques, 6 drones &mdash; tout intercepte.<br>
+            Iran: 1,255+ tues, 9,669 sites civils detruits dont 8,000 maisons. 884K+ deplaces.
+          </div>
+        </div>
+
+        <div class="tl-item major">
+          <div class="tl-day">Jour 11 &mdash; 10 mar (mardi)</div>
+          <div class="tl-title">"Journee de frappes la plus intense" &mdash; Iran mine Ormuz</div>
+          <div class="tl-detail">
+            <strong style="color:var(--red);">Iran commence a poser des mines</strong> dans le detroit d'Ormuz (quelques dizaines posees).<br>
+            <strong style="color:var(--green);">US detruit 16 poseurs de mines iraniens</strong> pres du detroit.<br>
+            3+ navires attaques. Trump: "je pense a prendre le controle" du detroit. Propose escortes navales.<br>
+            Programme reassurance $20B (Chubb/DFC) pour relancer le shipping.<br>
+            <strong style="color:var(--green);">Brent chute a $87.80 (-11.28%)</strong> sur commentaires "guerre terminee".<br>
+            7e militaire US decede (blesse Arabie Saoudite).
+          </div>
+        </div>
+
+        <div class="tl-item critical">
+          <div class="tl-day">Jour 12 &mdash; 11 mar (mercredi)</div>
+          <div class="tl-title">Offensive la plus lourde d'Iran &mdash; IEA libere 400M barils</div>
+          <div class="tl-detail">
+            <strong style="color:var(--red);">Iran lance "l'operation la plus intense et lourde"</strong> de la guerre: missiles multi-ogives sur Israel, Etats du Golfe, navires pres d'Ormuz.<br>
+            US/Israel frappent Teheran et nord de l'Iran dans la nuit. Israel frappe Beyrouth + ordres d'evacuation sud Liban.<br>
+            <strong style="color:var(--yellow);">IEA annonce liberation record de 400M barils</strong> de reserves strategiques (plus gros de l'histoire).<br>
+            Brent: $91.98 (+4.76%). CSNU adopte resolution condamnant Iran (13 pour, RU/CN s'abstiennent).<br>
+            3 navires cargo frappes. Trump: "la guerre pourrait se terminer bientot."
+          </div>
+        </div>
+
+        <div class="tl-item critical">
+          <div class="tl-day">Jour 13 &mdash; 12 mar (jeudi) AUJOURD'HUI</div>
+          <div class="tl-title">6 navires attaques &mdash; Parchin frappe &mdash; Iran pose 3 conditions</div>
+          <div class="tl-detail">
+            <strong style="color:var(--red);">6 navires attaques</strong> (drone-bateaux kamikazes, tirs IRGC, mines): Safesea Vishnu (1 mort), Zefyros (en feu), Mayuree Naree (3 disparus), ONE Majesty, Star Gwyneth, +1 container pres Dubai.<br>
+            <strong style="color:var(--red);">IDF frappe Taleghan/Parchin</strong> (complexe nucleaire AMAD). "Vague de frappes a grande echelle" sur infrastructure du regime.<br>
+            <strong style="color:var(--orange);">Operation conjointe IRGC-Hezbollah:</strong> 10 balistiques multi-ogives sur Tel Aviv/Haifa. "Operation la plus intense" de l'Iran. Israel: 14 soldats + 179 civils blesses (24h).<br>
+            <strong style="color:var(--yellow);">Iran pose 3 conditions:</strong> reconnaissance droits, reparations de guerre, garanties internationales. Araghchi: "Ils doivent expliquer pourquoi ils ont commence."<br>
+            <strong style="color:var(--cyan);">Mojtaba Khamenei:</strong> 1er discours public (texte lu a la TV, pas de video). Ormuz = "levier de blocus". Vengeance pour ecole Minab.<br>
+            <strong style="color:var(--purple);">Beyrouth:</strong> Double-tap Ramlet al-Baida (8 tues, deplaces sur la plage). Dahiyeh re-frappe. Katz: "prendre du territoire" si Hezbollah continue.<br>
+            <strong style="color:var(--orange);">Golfe:</strong> Drones sur Shaybah (Arabie), Dubai (Address Creek Harbour tower), Oman (port Salalah en feu, Maersk suspend). Citibank ferme UAE, HSBC ferme Qatar.<br>
+            Brent: $101.20 (+10%). S&amp;P 500: ~6,660 (-1.52%), plus bas depuis nov 2025. VIX: 27.29. Pentagon: ecole Minab = Tomahawk US (enquete interne).<br>
+            <strong style="color:var(--green);">Russie = "seul gagnant":</strong> offre petrole/gaz a l'Europe. Trump: 30 jours waiver Inde pour acheter petrole russe. Sanctions russes allégées en vue.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== COUNTRIES INVOLVED ===== -->
+  <div class="card two-cols" id="sec-countries">
+    <div class="card-header">
+      <span class="card-title">Pays Impliques</span>
+      <span class="card-badge info-bg">16+ NATIONS</span>
+    </div>
+    <div class="card-body">
+      <div style="font-size:11px;color:var(--text2);text-transform:uppercase;margin-bottom:10px;letter-spacing:1px;">Attaquants</div>
+      <div class="country-grid" style="margin-bottom:14px;">
+        <div class="country-item" style="border-left:3px solid var(--red);">
+          <div class="country-flag">&#127482;&#127480;</div>
+          <div>
+            <div class="country-name">Etats-Unis</div>
+            <div class="country-role">Lead attacker &mdash; Operation Epic Fury | 6,000+ cibles | $11.3B (6j) | 11 MQ-9 perdus</div>
+          </div>
+        </div>
+        <div class="country-item" style="border-left:3px solid var(--red);">
+          <div class="country-flag">&#127470;&#127473;</div>
+          <div>
+            <div class="country-name">Israel</div>
+            <div class="country-role">Operation Roaring Lion | 2,600+ sorties IDF | Decapitation, nucleaire, Parchin/AMAD | F-35 1er kill air-air</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="font-size:11px;color:var(--text2);text-transform:uppercase;margin-bottom:10px;letter-spacing:1px;">Coalition / Defense</div>
+      <div class="country-grid" style="margin-bottom:14px;">
+        <div class="country-item" style="border-left:3px solid var(--blue);">
+          <div class="country-flag">&#127468;&#127463;</div>
+          <div>
+            <div class="country-name">Royaume-Uni</div>
+            <div class="country-role">Role defensif: interceptions missiles (Qatar, Jordanie, Irak, Chypre)</div>
+          </div>
+        </div>
+        <div class="country-item" style="border-left:3px solid var(--blue);">
+          <div class="country-flag">&#127467;&#127479;</div>
+          <div>
+            <div class="country-name">France</div>
+            <div class="country-role">CdG + 10 navires suppl. (8 fregates + 2 amphibies) | Escortes "defensives" Ormuz</div>
+          </div>
+        </div>
+        <div class="country-item" style="border-left:3px solid var(--blue);">
+          <div class="country-flag">&#127462;&#127482;</div>
+          <div>
+            <div class="country-name">Australie</div>
+            <div class="country-role">3 militaires ADF a bord USS Charlotte (rotation AUKUS)</div>
+          </div>
+        </div>
+        <div class="country-item" style="border-left:3px solid var(--cyan);">
+          <div class="country-flag">&#127468;&#127479;</div>
+          <div>
+            <div class="country-name">Grece</div>
+            <div class="country-role">F-16 + 2 fregates + FDI Kimon | Protection Chypre</div>
+          </div>
+        </div>
+        <div class="country-item" style="border-left:3px solid var(--cyan);">
+          <div class="country-flag">&#127470;&#127481;</div>
+          <div>
+            <div class="country-name">Italie / Pays-Bas</div>
+            <div class="country-role">Navires de guerre pour defense de Chypre</div>
+          </div>
+        </div>
+        <div class="country-item" style="border-left:3px solid var(--yellow);">
+          <div class="country-flag">&#127466;&#127480;</div>
+          <div>
+            <div class="country-name">Espagne</div>
+            <div class="country-role">ESPS Cristobal Colon (avec CdG) MAIS refuse acces aux bases Rota/Moron pour frappes offensives</div>
+          </div>
+        </div>
+        <div class="country-item" style="border-left:3px solid var(--cyan);">
+          <div class="country-flag">&#127465;&#127466;</div>
+          <div>
+            <div class="country-name">Allemagne</div>
+            <div class="country-role">Declarations diplomatiques conjointes FR/UK/DE</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="font-size:11px;color:var(--text2);text-transform:uppercase;margin-bottom:10px;letter-spacing:1px;">Cibles / Victimes</div>
+      <div class="country-grid" style="margin-bottom:14px;">
+        <div class="country-item" style="border-left:3px solid var(--orange);">
+          <div class="country-flag">&#127463;&#127469;</div>
+          <div>
+            <div class="country-name">Bahrein</div>
+            <div class="country-role">75 balistiques + 124 drones | QG 5e Flotte touche | Muharraq en feu</div>
+          </div>
+        </div>
+        <div class="country-item" style="border-left:3px solid var(--orange);">
+          <div class="country-flag">&#127478;&#127462;</div>
+          <div>
+            <div class="country-name">Qatar</div>
+            <div class="country-role">44+ missiles, 8+ drones sur Al Udeid | LNG production arretee</div>
+          </div>
+        </div>
+        <div class="country-item" style="border-left:3px solid var(--orange);">
+          <div class="country-flag">&#127462;&#127466;</div>
+          <div>
+            <div class="country-name">UAE</div>
+            <div class="country-role">6 morts | 268 balistiques + 1,514 drones | Ruwais (922K bpd) arretee | Ras Tanura en feu</div>
+          </div>
+        </div>
+        <div class="country-item" style="border-left:3px solid var(--orange);">
+          <div class="country-flag">&#127472;&#127484;</div>
+          <div>
+            <div class="country-name">Koweit</div>
+            <div class="country-role">97 balistiques + 283 drones | 6 US tues | Tir ami 3 F-15E | Ambassade frappee</div>
+          </div>
+        </div>
+        <div class="country-item" style="border-left:3px solid var(--orange);">
+          <div class="country-flag">&#127480;&#127462;</div>
+          <div>
+            <div class="country-name">Arabie Saoudite</div>
+            <div class="country-role">Riyad et region est ciblees | Attaques repoussees</div>
+          </div>
+        </div>
+        <div class="country-item" style="border-left:3px solid var(--orange);">
+          <div class="country-flag">&#127473;&#127463;</div>
+          <div>
+            <div class="country-name">Liban</div>
+            <div class="country-role">630+ morts, 800K deplaces | Double-tap Beyrouth | Katz: "prendre territoire"</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="font-size:11px;color:var(--text2);text-transform:uppercase;margin-bottom:10px;letter-spacing:1px;">Observateurs / Opposants</div>
+      <div class="country-grid">
+        <div class="country-item" style="border-left:3px solid var(--purple);">
+          <div class="country-flag">&#127479;&#127482;</div>
+          <div>
+            <div class="country-name">Russie</div>
+            <div class="country-role">"Seul gagnant" du conflit | Offre petrole/gaz a l'Europe | Soutien Iran</div>
+          </div>
+        </div>
+        <div class="country-item" style="border-left:3px solid var(--purple);">
+          <div class="country-flag">&#127464;&#127475;</div>
+          <div>
+            <div class="country-name">Chine</div>
+            <div class="country-role">Condamne frappes | Oppose cibler Mojtaba | Abstention CSNU Res. 2817</div>
+          </div>
+        </div>
+        <div class="country-item" style="border-left:3px solid var(--yellow);">
+          <div class="country-flag">&#127486;&#127466;</div>
+          <div>
+            <div class="country-name">Houthis (Yemen)</div>
+            <div class="country-role">"Nos mains sont sur la gachette" &mdash; toujours PAS attaque (au 12 mar). Calcul: trop a perdre (etat, ports, universites)</div>
+          </div>
+        </div>
+        <div class="country-item" style="border-left:3px solid var(--cyan);">
+          <div class="country-flag">&#127470;&#127475;</div>
+          <div>
+            <div class="country-name">Inde</div>
+            <div class="country-role">"Exemption" Ormuz NON CONFIRMEE (Iran nie) | 70-75% imports hors Ormuz | Waiver petrole russe</div>
+          </div>
+        </div>
+        <div class="country-item" style="border-left:3px solid var(--orange);">
+          <div class="country-flag">&#127476;&#127474;</div>
+          <div>
+            <div class="country-name">Oman</div>
+            <div class="country-role">Drone sur port Salalah (en feu) | Mina Al Fahal evacue | Sultan condamne Iran</div>
+          </div>
+        </div>
+        <div class="country-item" style="border-left:3px solid var(--cyan);">
+          <div class="country-flag">&#127482;&#127462;</div>
+          <div>
+            <div class="country-name">Ukraine</div>
+            <div class="country-role">Zelenskyy deploie 3 equipes experts | Deal drones en attente | Opportuniste</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== DIPLOMATIC STATUS ===== -->
+  <div class="card" id="sec-diplo">
+    <div class="card-header">
+      <span class="card-title">Status Diplomatique</span>
+      <span class="card-badge negative-bg">PAS DE CESSEZ-LE-FEU</span>
+    </div>
+    <div class="card-body">
+      <div style="text-align:center;margin-bottom:14px;">
+        <div style="font-size:16px;font-weight:800;color:var(--red);padding:10px;background:var(--red-bg);border-radius:8px;">AUCUNE NEGOCIATION EN COURS</div>
+      </div>
+
+      <div style="padding:10px;background:var(--bg);border-radius:6px;border:1px solid var(--orange);margin-bottom:12px;">
+        <div style="font-size:11px;color:var(--orange);font-weight:800;text-transform:uppercase;margin-bottom:6px;">3 Conditions iraniennes pour un cessez-le-feu (Pezeshkian, J13)</div>
+        <div style="font-size:12px;color:var(--text);line-height:1.6;">
+          1. Reconnaissance des droits legitimes de Teheran<br>
+          2. Paiement de reparations de guerre<br>
+          3. Garanties internationales contre toute agression future
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div class="callout callout-red">
+          <strong style="color:var(--red);">ARAGHCHI (J13):</strong>
+          <span style="color:var(--text2);">"Ils doivent expliquer pourquoi ils ont commence cette agression avant qu'on considere un cessez-le-feu."</span>
+        </div>
+        <div class="callout callout-red">
+          <strong style="color:var(--red);">GHALIBAF (Parlement):</strong>
+          <span style="color:var(--text2);">"Certainement, nous ne cherchons pas un cessez-le-feu." Avertit: invasion terrestre = "abandon de toute retenue."</span>
+        </div>
+        <div class="callout callout-orange">
+          <strong style="color:var(--orange);">TRUMP (J13):</strong>
+          <span style="color:var(--text2);">"We've won." / "When oil prices go up, we make a lot of money." / Peut arreter "quand il veut". Waiver 30j Inde pour acheter petrole russe.</span>
+        </div>
+        <div class="callout callout-orange">
+          <strong style="color:var(--orange);">ISRAEL (Katz):</strong>
+          <span style="color:var(--text2);">"Continuera sans limite de temps." / Menace de "prendre du territoire" au Liban si Hezbollah persiste.</span>
+        </div>
+        <div class="callout callout-blue">
+          <strong style="color:var(--blue);">CSNU Res. 2817 (J13):</strong>
+          <span style="color:var(--text2);">Adoptee 13-0-2 (RU/CN abstention). GCC+Jordanie sponsors, 135 co-sponsors. Condamne attaques iraniennes &mdash; OMET les frappes US/IL. Iran: "tache durable" sur le Conseil.</span>
+        </div>
+        <div class="callout callout-cyan">
+          <strong style="color:var(--cyan);">FRANCE:</strong>
+          <span style="color:var(--text2);">Macron: escortes "purement defensives" pour Ormuz "des que possible". 10 navires suppl. deployes. Coalition avec Japon et Inde en formation.</span>
+        </div>
+        <div class="callout callout-red" style="margin-top:8px;">
+          <strong style="color:var(--red);">LARIJANI (Pdt Assemblee, J12):</strong>
+          <span style="color:var(--text2);">"Si une guerre terrestre commence, cette region va plonger dans le noir en une demi-heure." Menace explicite sur les infrastructures energetiques du Golfe.</span>
+        </div>
+        <div class="callout callout-purple" style="margin-top:8px;">
+          <strong style="color:var(--purple);">PEZESHKIAN (President):</strong>
+          <span style="color:var(--text2);">S'est excuse aupres des pays voisins (UAE, Qatar, Bahrein, Koweit) pour les dommages causes par les frappes iraniennes. Ton conciliant rare en plein conflit.</span>
+        </div>
+        <div class="callout callout-orange" style="margin-top:8px;">
+          <strong style="color:var(--orange);">TRUMP:</strong>
+          <span style="color:var(--text2);">Declare que la Coupe du Monde 2026 (US) se deroulera "dans un environnement sur" malgre la guerre. Avertissement FBI: cellules dormantes iraniennes en sol americain.</span>
+        </div>
+      </div>
+
+      <div style="margin-top:12px;padding:10px;background:var(--bg);border-radius:6px;">
+        <div style="font-size:11px;color:var(--text2);margin-bottom:6px;text-transform:uppercase;">Base legale US</div>
+        <div style="font-size:12px;color:var(--text);">
+          Trump invoque Article II (pouvoirs executifs) + AUMF 2001 (conteste). Lance sans autorisation du Congres. Senat rejette War Powers Resolution 47-53.
+        </div>
+      </div>
+
+      <div style="margin-top:8px;padding:10px;background:var(--bg);border-radius:6px;">
+        <div style="font-size:11px;color:var(--text2);margin-bottom:6px;text-transform:uppercase;">Opinion publique US</div>
+        <div style="font-size:12px;color:var(--text);">
+          Seulement <strong style="color:var(--red);">29%</strong> des Americains approuvent les frappes. 2/3 s'attendent a ce que les prix de l'essence continuent de monter.
+        </div>
+      </div>
+
+      <div style="margin-top:8px;padding:10px;background:var(--bg);border-radius:6px;">
+        <div style="font-size:11px;color:var(--text2);margin-bottom:6px;text-transform:uppercase;">Leadership Iran</div>
+        <div style="font-size:12px;color:var(--text);">
+          <strong style="color:var(--orange);">Mojtaba Khamenei</strong> (fils, 56 ans) elu Supreme Leader le 8 mars. Pied fracture. <strong>1er discours J13</strong> (texte lu a TV, pas de video). Utilise terme "janbaz" (blesse de guerre). Ormuz = levier. "Bases US seront attaquees si pas fermees." Russie: soutien "inebranlable". Chine: oppose de le cibler.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== HUMANITARIAN IMPACT ===== -->
+  <div class="card" id="sec-human">
+    <div class="card-header">
+      <span class="card-title">Impact Humanitaire</span>
+      <span class="card-badge purple-bg">CRISE</span>
+    </div>
+    <div class="card-body">
+      <div class="metric-grid" style="margin-bottom:14px;">
+        <div class="metric-item metric-red">
+          <div class="metric-label">Morts civils Iran</div>
+          <div class="metric-value" style="font-size:20px;">1,348+</div>
+          <div class="metric-sub">Civils (Iran ONU) | 4,300+ total (Hengaw)</div>
+        </div>
+        <div class="metric-item metric-orange">
+          <div class="metric-label">Deplaces Iran</div>
+          <div class="metric-value" style="font-size:20px;">3.2M</div>
+          <div class="metric-sub">UNHCR | 750K+ region</div>
+        </div>
+        <div class="metric-item metric-purple">
+          <div class="metric-label">Sites civils detruits</div>
+          <div class="metric-value" style="font-size:20px;">9,669</div>
+          <div class="metric-sub">Dont ~8,000 maisons</div>
+        </div>
+        <div class="metric-item metric-red">
+          <div class="metric-label">Ecole Minab</div>
+          <div class="metric-value" style="font-size:20px;">168-180</div>
+          <div class="metric-sub">Tues (enfants) &mdash; Pentagon: Tomahawk US</div>
+        </div>
+      </div>
+
+      <div class="callout callout-purple">
+        <strong style="color:var(--purple);">PLUIE TOXIQUE (J10):</strong>
+        <span style="color:var(--text2);">Pluie noire/acide sur Teheran. Fumee des depots de carburant en feu + pluie = SO2, HAP. Contamination sol et eau. Alerte OMS.</span>
+      </div>
+      <div class="callout callout-red" style="margin-top:6px;">
+        <strong style="color:var(--red);">SANTE:</strong>
+        <span style="color:var(--text2);">30+ hopitaux/cliniques endommages. 55 travailleurs medicaux blesses, 11 tues. Hopital Gandhi (nord Teheran) frappe par Israel. Installations medicales, ecoles, centres commerciaux dans les 9,669 sites detruits.</span>
+      </div>
+      <div class="callout callout-orange" style="margin-top:6px;">
+        <strong style="color:var(--orange);">REFUGIES AFGHANS:</strong>
+        <span style="color:var(--text2);">~2.6M de refugies afghans en Iran, particulierement vulnerables. Acces limite aux abris et aide humanitaire.</span>
+      </div>
+      <div class="callout callout-blue" style="margin-top:6px;">
+        <strong style="color:var(--blue);">LIBAN (J13):</strong>
+        <span style="color:var(--text2);">630+ morts, 83 enfants en 1 semaine. ~800K deplaces. Double-tap Ramlet al-Baida: 8 tues parmi deplaces dormant sur plage. HRW: phosphore blanc. Parlement prolonge mandat de 2 ans.</span>
+      </div>
+      <div class="callout callout-red" style="margin-top:6px;">
+        <strong style="color:var(--red);">ECOLE MINAB (UPDATE J13):</strong>
+        <span style="color:var(--text2);">Enquete interne Pentagon pointe vers un Tomahawk US. Bellingcat + BBC Verify geolocalisent la frappe. Ecole = ancienne base navale IRGC (separee 2013-16) possiblement sur liste de cibles desactualisee. UNICEF: 1,100+ enfants blesses/tues total.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== IRAN ATTACKS TRACKER ===== -->
+  <div class="card" id="sec-attacks">
+    <div class="card-header">
+      <span class="card-title">Attaques Iraniennes</span>
+      <span class="card-badge orange-bg">~2,410 MISSILES</span>
+    </div>
+    <div class="card-body">
+      <div style="margin-bottom:12px;">
+        <div style="font-size:11px;color:var(--text2);text-transform:uppercase;margin-bottom:8px;">Munitions tirees par l'Iran (cumul J1-J13)</div>
+        <div style="display:flex;gap:12px;margin-bottom:12px;">
+          <div style="flex:1;text-align:center;padding:12px;background:var(--bg);border-radius:8px;">
+            <div style="font-size:24px;font-weight:800;color:var(--red);font-family:monospace;">~2,410</div>
+            <div style="font-size:10px;color:var(--text2);text-transform:uppercase;">Missiles balistiques</div>
+          </div>
+          <div style="flex:1;text-align:center;padding:12px;background:var(--bg);border-radius:8px;">
+            <div style="font-size:24px;font-weight:800;color:var(--orange);font-family:monospace;">~2,000+</div>
+            <div style="font-size:10px;color:var(--text2);text-transform:uppercase;">Drones</div>
+          </div>
+        </div>
+        <div style="font-size:11px;color:var(--text2);margin-bottom:8px;">Repartition: ~40% Israel, ~60% bases US/Golfe | Stock pre-guerre: ~2,500 | Reserve quasi-epuisee | Taux tir J13: -92% vs J1</div>
+      </div>
+
+      <div style="font-size:11px;color:var(--text2);text-transform:uppercase;margin-bottom:8px;">Cibles principales</div>
+      <table class="data-table">
+        <tr><th>Cible</th><th>Tirs</th><th>Impact</th></tr>
+        <tr>
+          <td>Bahrein (5e Flotte)</td>
+          <td style="font-family:monospace;">75 balistiques + 124 drones</td>
+          <td style="color:var(--red);">QG 5e Flotte touche | Muharraq en feu</td>
+        </tr>
+        <tr>
+          <td>Qatar (Al Udeid)</td>
+          <td style="font-family:monospace;">44+ missiles + 8+ drones</td>
+          <td style="color:var(--green);">Tout intercepte</td>
+        </tr>
+        <tr>
+          <td>UAE</td>
+          <td style="font-family:monospace;">268 balistiques + 1,514 drones</td>
+          <td style="color:var(--orange);">241+1,385 intercep. | Drone Dubai tower</td>
+        </tr>
+        <tr>
+          <td>Koweit</td>
+          <td style="font-family:monospace;">97 balistiques + 283 drones</td>
+          <td style="color:var(--red);">6 US tues, ambassade frappee</td>
+        </tr>
+        <tr>
+          <td>Arabie Saoudite</td>
+          <td style="font-family:monospace;">Missiles balistiques</td>
+          <td style="color:var(--green);">Attaques repoussees</td>
+        </tr>
+        <tr>
+          <td>Israel</td>
+          <td style="font-family:monospace;">~40% du total</td>
+          <td style="color:var(--yellow);">Hezbollah solidarite</td>
+        </tr>
+        <tr>
+          <td>Navires (Ormuz)</td>
+          <td style="font-family:monospace;">USV kamikazes + tirs + mines</td>
+          <td style="color:var(--red);">22+ navires, 6 le J13</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== WAR COST ===== -->
+  <div class="card" id="sec-cost">
+    <div class="card-header">
+      <span class="card-title">Cout de la Guerre</span>
+      <span class="card-badge negative-bg">$11.3B EN 6 JOURS</span>
+    </div>
+    <div class="card-body">
+      <div style="display:flex;gap:12px;margin-bottom:12px;">
+        <div style="flex:1;text-align:center;padding:14px;background:var(--bg);border-radius:8px;border:1px solid var(--border);">
+          <div style="font-size:28px;font-weight:900;color:var(--red);font-family:monospace;">$11.3B</div>
+          <div style="font-size:10px;color:var(--text2);text-transform:uppercase;">6 premiers jours (Pentagon)</div>
+        </div>
+        <div style="flex:1;text-align:center;padding:14px;background:var(--bg);border-radius:8px;border:1px solid var(--border);">
+          <div style="font-size:28px;font-weight:900;color:var(--orange);font-family:monospace;">$1.5B+</div>
+          <div style="font-size:10px;color:var(--text2);text-transform:uppercase;">Par jour (estime)</div>
+        </div>
+      </div>
+      <div style="text-align:center;padding:12px;background:var(--bg);border-radius:8px;border:1px solid var(--border);">
+        <div style="font-size:22px;font-weight:800;color:var(--yellow);font-family:monospace;">$210B</div>
+        <div style="font-size:10px;color:var(--text2);text-transform:uppercase;">Impact economique total estime (Penn Wharton)</div>
+      </div>
+      <div class="callout callout-red" style="margin-top:10px;">
+        <strong style="color:var(--red);">CSIS:</strong>
+        <span style="color:var(--text2);">$3.7B dans les 100 premieres heures. $11.3B = n'inclut PAS le remplacement des munitions (Tomahawks ~$2M chaque, JDAM, munitions guidees). Cout total reel probablement $15-20B+.</span>
+      </div>
+      <div class="callout callout-orange" style="margin-top:6px;">
+        <strong style="color:var(--orange);">TRUMP:</strong>
+        <span style="color:var(--text2);">"When oil prices go up, we make a lot of money." / "Preventing nuclear weapons is more important than oil prices."</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ECONOMIC IMPACT ===== -->
+  <div class="card" id="sec-economy">
+    <div class="card-header">
+      <span class="card-title">Impact Economique Global</span>
+      <span class="card-badge warning-bg">SEVERE</span>
+    </div>
+    <div class="card-body">
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="padding:10px;background:var(--bg);border-radius:6px;border-left:3px solid var(--red);">
+          <div style="font-size:11px;color:var(--text2);text-transform:uppercase;">Assurance maritime</div>
+          <div style="font-size:13px;color:var(--text);margin-top:4px;">
+            Primes risk-guerre <strong style="color:var(--red);">+1,000%</strong> (0.125% &rarr; 0.2-0.4% de la valeur de coque). Assureurs annulent couverture.
+          </div>
+        </div>
+        <div style="padding:10px;background:var(--bg);border-radius:6px;border-left:3px solid var(--orange);">
+          <div style="font-size:11px;color:var(--text2);text-transform:uppercase;">Programme reassurance US</div>
+          <div style="font-size:13px;color:var(--text);margin-top:4px;">
+            <strong style="color:var(--orange);">$20 milliards</strong> &mdash; Chubb lead underwriter via DFC. Pour relancer le shipping dans Ormuz.
+          </div>
+        </div>
+        <div style="padding:10px;background:var(--bg);border-radius:6px;border-left:3px solid var(--yellow);">
+          <div style="font-size:11px;color:var(--text2);text-transform:uppercase;">Supply chains</div>
+          <div style="font-size:13px;color:var(--text);margin-top:4px;">
+            Maersk suspend operations Salalah (Oman en feu). Reroutage Cap Bonne-Esperance. 30% jet fuel EU via Ormuz. Cathay Pacific: surcharges x2 (~$150/trajet). Air NZ: -5% vols. Citibank ferme UAE, HSBC ferme Qatar.
+          </div>
+        </div>
+        <div style="padding:10px;background:var(--bg);border-radius:6px;border-left:3px solid var(--purple);">
+          <div style="font-size:11px;color:var(--text2);text-transform:uppercase;">Marches financiers</div>
+          <div style="font-size:13px;color:var(--text);margin-top:4px;">
+            S&amp;P 500: <strong style="color:var(--red);">~6,660 (-1.52%)</strong> plus bas depuis nov 2025. VIX: 27.29 (+12.6%). JPMorgan: risque correction -10%. XLE (energie): <strong style="color:var(--green);">+21.6% YTD</strong>. Nasdaq: -1.19%. Russell: -1.93%. Mortgage 30y: 5.99% &rarr; 6.29%.
+          </div>
+        </div>
+        <div style="padding:10px;background:var(--bg);border-radius:6px;border-left:3px solid var(--green);">
+          <div style="font-size:11px;color:var(--text2);text-transform:uppercase;">SPR / Reserves strategiques</div>
+          <div style="font-size:13px;color:var(--text);margin-top:4px;">
+            IEA: liberation record <strong style="color:var(--green);">400M barils</strong> (US 172M, Japon 80M, Coree 22.5M, DE 19.5M, FR 14.5M, UK 13.5M + 26 pays). 32 pays IEA unanimes. IEA: "plus grande perturbation de l'histoire." N'a PAS ramene Brent sous $100.
+          </div>
+        </div>
+        <div style="padding:10px;background:var(--bg);border-radius:6px;border-left:3px solid var(--red);">
+          <div style="font-size:11px;color:var(--text2);text-transform:uppercase;">SPR Reality Check &mdash; Le compte n'est PAS bon</div>
+          <div style="font-size:13px;color:var(--text);margin-top:4px;">
+            <strong style="color:var(--orange);">Debit reel US:</strong> ~1.43M bbl/jour (172M / 120 jours). Max theorique SPR: 4.4M/jour mais infrastructure annees 70 degradee (GAO). Debit historique peak: 1.4M/jour (JPMorgan).<br>
+            <strong style="color:var(--orange);">Debit combine IEA:</strong> Estimations 1.2-4M bbl/jour. Realiste: <strong style="color:var(--red);">2-3M/jour</strong>. Japon a des stocks sans infrastructure de liberation.<br>
+            <strong style="color:var(--red);">vs Deficit Ormuz:</strong> Shortfall reel = 11-16M bpd (Citigroup). 2-3M/jour = <strong>seulement 15-27% du deficit</strong>. JPMorgan: "1.4M/jour ne compensera pas materiellement 16M bpd."<br>
+            <strong style="color:var(--yellow);">Duree:</strong> A 2M/jour = 200 jours (~6.5 mois). A 4M/jour optimiste = 100 jours. US SPR post-release: 243M barils (34% capacite) = dangereusement bas.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CYBER WARFARE ===== -->
+  <div class="card" id="sec-cyber">
+    <div class="card-header">
+      <span class="card-title">Guerre Cybernetique</span>
+      <span class="card-badge cyan-bg">ACTIF</span>
+    </div>
+    <div class="card-body">
+      <div class="callout callout-blue">
+        <strong style="color:var(--blue);">ISRAEL (J1):</strong>
+        <span style="color:var(--text2);">"Plus grande cyberattaque de l'histoire" le 28 fev &mdash; plonge des parties de l'Iran dans le noir.</span>
+      </div>
+      <div class="callout callout-red" style="margin-top:8px;">
+        <strong style="color:var(--red);">HACKTIVISTES:</strong>
+        <span style="color:var(--text2);">150+ incidents en 48h (DDoS, defacements, breaches de donnees). APT iraniens ciblent infrastructure critique US (finance, eau, transport).</span>
+      </div>
+      <div class="callout callout-orange" style="margin-top:8px;">
+        <strong style="color:var(--orange);">JORDANIE:</strong>
+        <span style="color:var(--text2);">APT IRAN revendique infiltration des centrales electriques jordaniennes &mdash; reduction 75% electricite.</span>
+      </div>
+      <div class="callout callout-purple" style="margin-top:8px;">
+        <strong style="color:var(--purple);">STRYKER (J13):</strong>
+        <span style="color:var(--text2);">Groupe "Handala" revendique la 1ere cyberattaque majeure sur une entreprise US &mdash; Stryker (med-tech). Compromission via Microsoft Intune (MDM) &rarr; remote wipe des appareils. Reseau mondial paralyse. Pas 50TB confirme &mdash; destruction de donnees + paralysie operations.</span>
+      </div>
+      <div class="callout callout-yellow" style="margin-top:8px;">
+        <strong style="color:var(--yellow);">ALERTES:</strong>
+        <span style="color:var(--text2);">Palo Alto Unit 42 et CISA: menace elevee. "Electronic Operations Room" coordonne les operations cyber iraniennes depuis J1. Cibles: Israel, Kuwait, Jordanie, Bahrein, Qatar, UAE. Inquietude sur cyberattaques alimentees par IA.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== KEY EVENTS LOG ===== -->
+  <div class="card" id="sec-events">
+    <div class="card-header">
+      <span class="card-title">Evenements Marquants</span>
+      <span class="card-badge orange-bg">HISTORIQUES</span>
+    </div>
+    <div class="card-body">
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="padding:10px;background:var(--bg);border-radius:6px;border-left:3px solid var(--red);">
+          <div style="font-size:11px;color:var(--red);font-weight:700;">28 FEV &mdash; ASSASSINATION</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:4px;">
+            Ayatollah Ali Khamenei assassine par frappes israeliennes sur le complexe Leadership House a Teheran. CIA avait localise sa reunion. Dizaines d'officiels seniors tues dans la meme frappe.
+          </div>
+        </div>
+        <div style="padding:10px;background:var(--bg);border-radius:6px;border-left:3px solid var(--orange);">
+          <div style="font-size:11px;color:var(--orange);font-weight:700;">4 MAR &mdash; TORPILLAGE IRIS DENA</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:4px;">
+            USS Charlotte torpille la fregate IRIS Dena au large du Sri Lanka. 87+ tues, 61 disparus. Premier torpillage d'un navire de guerre par un sous-marin US depuis la Seconde Guerre mondiale.
+          </div>
+        </div>
+        <div style="padding:10px;background:var(--bg);border-radius:6px;border-left:3px solid var(--yellow);">
+          <div style="font-size:11px;color:var(--yellow);font-weight:700;">2 MAR &mdash; TIR AMI KOWEIT</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:4px;">
+            F/A-18 koweitien abat 3 F-15E Strike Eagles americains. Les 6 membres d'equipage s'ejectent sains et saufs. Incident diplomatique majeur.
+          </div>
+        </div>
+        <div style="padding:10px;background:var(--bg);border-radius:6px;border-left:3px solid var(--purple);">
+          <div style="font-size:11px;color:var(--purple);font-weight:700;">8 MAR &mdash; DEPOTS EN FEU</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:4px;">
+            Israel frappe 4 depots de carburant majeurs a Teheran. Incendies massifs, riviere de feu. Brent spike a $119.50 intraday. Pluie toxique noire le lendemain.
+          </div>
+        </div>
+        <div style="padding:10px;background:var(--bg);border-radius:6px;border-left:3px solid var(--cyan);">
+          <div style="font-size:11px;color:var(--cyan);font-weight:700;">8 MAR &mdash; MOJTABA SUPREME LEADER</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:4px;">
+            Mojtaba Khamenei (fils, 56 ans) elu Supreme Leader par l'Assemblee des Experts. Vote unanime sous pression IRGC. Pied fracture, pas vu en public. Leadership fracture.
+          </div>
+        </div>
+        <div style="padding:10px;background:var(--bg);border-radius:6px;border-left:3px solid var(--green);">
+          <div style="font-size:11px;color:var(--green);font-weight:700;">11 MAR &mdash; IEA 400M BARILS</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:4px;">
+            Plus grande liberation coordonnee de reserves strategiques de l'histoire. 400M barils pour stabiliser les marches. N'a pas ramene Brent sous $100.
+          </div>
+        </div>
+        <div style="padding:10px;background:var(--bg);border-radius:6px;border-left:3px solid var(--red);">
+          <div style="font-size:11px;color:var(--red);font-weight:700;">12 MAR &mdash; PARCHIN/TALEGHAN FRAPPE</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:4px;">
+            IDF frappe le complexe nucleaire Taleghan a Parchin (30 km SE Teheran). Lie au programme AMAD. Reconstruit depuis frappe oct 2024. "Vague de frappes a grande echelle."
+          </div>
+        </div>
+        <div style="padding:10px;background:var(--bg);border-radius:6px;border-left:3px solid var(--orange);">
+          <div style="font-size:11px;color:var(--orange);font-weight:700;">12 MAR &mdash; 6 NAVIRES ATTAQUES EN 1 JOUR</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:4px;">
+            Record journalier: 6 navires frappes (drone-bateaux kamikazes, tirs IRGC). 1 mort (Safesea Vishnu), 3 disparus (Mayuree Naree). Iraq ferme ses ports. Brent repasse au-dessus de $98.
+          </div>
+        </div>
+        <div style="padding:10px;background:var(--bg);border-radius:6px;border-left:3px solid var(--yellow);">
+          <div style="font-size:11px;color:var(--yellow);font-weight:700;">12 MAR &mdash; ECOLE MINAB: TOMAHAWK US</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:4px;">
+            Enquete interne Pentagon pointe vers un Tomahawk US. Bellingcat + BBC Verify confirment. Ecole = ancienne base IRGC sur liste de cibles desactualisee. 168-180 enfants tues.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== IRAN'S FIRED AT... MAP SUMMARY ===== -->
+  <div class="card" id="sec-iran-losses">
+    <div class="card-header">
+      <span class="card-title">Pertes Iraniennes &mdash; Detail</span>
+      <span class="card-badge negative-bg">MASSIVES</span>
+    </div>
+    <div class="card-body">
+      <table class="data-table">
+        <tr><th>Categorie</th><th>Detail</th><th>Status</th></tr>
+        <tr>
+          <td style="font-weight:600;">Marine</td>
+          <td>60+ navires coules/desactives | Classe Soleimani eliminee | IRIS Dena torpillee</td>
+          <td style="color:var(--red);font-weight:600;">DETRUIT</td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;">Force aerienne</td>
+          <td>16 avions IRGC (Mehrabad) + F-14 Tomcat (Isfahan)</td>
+          <td style="color:var(--red);font-weight:600;">DETRUIT</td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;">QG IRGC</td>
+          <td>Malek-Ashtar, Basij HQ, SNSC HQ</td>
+          <td style="color:var(--red);font-weight:600;">DETRUIT</td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;">IRIB (TV Etat)</td>
+          <td>Siege principal a Teheran</td>
+          <td style="color:var(--red);font-weight:600;">DETRUIT</td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;">Depots carburant</td>
+          <td>Karaj, Shehran, Aghdasiyeh + raffinerie Teheran</td>
+          <td style="color:var(--red);font-weight:600;">DETRUIT</td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;">Aeroports</td>
+          <td>Bushehr, Mehrabad, Shiraz</td>
+          <td style="color:var(--red);font-weight:600;">FRAPPE</td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;">Defense aerienne</td>
+          <td>Radars S-300, dominance aerienne US/IL</td>
+          <td style="color:var(--red);font-weight:600;">NEUTRALISE</td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;">Nucleaire</td>
+          <td>Fordow, Natanz, Esfahan (juin 2025) + Parchin/Taleghan (J13)</td>
+          <td style="color:var(--red);font-weight:600;">INOPERABLE</td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;">Assemblee Experts</td>
+          <td>Bombee en session par Israel</td>
+          <td style="color:var(--red);font-weight:600;">FRAPPE</td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;">Leadership</td>
+          <td>Khamenei tue + dizaines d'officiels</td>
+          <td style="color:var(--red);font-weight:600;">DECAPITE</td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;">Vedettes/Mineurs</td>
+          <td>28 poseurs detruits (Trump) / 16 (CENTCOM) | Stock mines: 2,000-6,000</td>
+          <td style="color:var(--orange);font-weight:600;">80-90% INTACT</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== WHAT TO WATCH ===== -->
+  <div class="card full-width" id="sec-watch">
+    <div class="card-header">
+      <span class="card-title">A Surveiller</span>
+      <span class="card-badge warning-bg">PROCHAIN</span>
+    </div>
+    <div class="card-body">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px;">
+        <div class="callout callout-red">
+          <strong style="color:var(--red);">MINES + USV KAMIKAZES</strong><br>
+          <span style="color:var(--text2);">Iran a deploye ~12 mines + utilise drone-bateaux kamikazes. Stock mines: 2,000-6,000 (IISS). 80-90% vedettes intactes. Navy US pas d'escortes avant fin mars. Deminage = semaines/mois. 6 navires frappes J13 = record. <strong>Gap critique: Avenger MCM retires jan 2026, LCS pas encore prets.</strong></span>
+        </div>
+        <div class="callout callout-red">
+          <strong style="color:var(--red);">IRON DOME SATURE (~50%)</strong><br>
+          <span style="color:var(--text2);">Le 11 mars, Iron Dome tombe a ~50% efficacite lors d'une salve de 200+ rockets Hezbollah en simultane. Systeme concu pour 3-5 cibles, pas 50+. Arrow/David's Sling tiennent pour balistiques. IDF deploie 4 divisions au Liban.</span>
+        </div>
+        <div class="callout callout-orange">
+          <strong style="color:var(--orange);">HOUTHIS &mdash; JOKER</strong><br>
+          <span style="color:var(--text2);">Toujours pas attaque J13. Officials anonymes: "attaqueront bientot Israel et shipping." Mais calcul rationnel: gerent un etat (ports, impots, universites). Si entrent: double crise maritime.</span>
+        </div>
+        <div class="callout callout-yellow">
+          <strong style="color:var(--yellow);">3 CONDITIONS IRAN</strong><br>
+          <span style="color:var(--text2);">Iran pose conditions: droits, reparations, garanties. Trump dit pouvoir arreter "quand il veut". Aucun mecanisme de negociation. Ghalibaf: invasion = "abandon de toute retenue."</span>
+        </div>
+        <div class="callout callout-purple">
+          <strong style="color:var(--purple);">URANIUM ~200KG</strong><br>
+          <span style="color:var(--text2);">~200 kg uranium enrichi a Isfahan/Natanz. Parchin/AMAD frappe J13. Capture necessite troupes au sol (CNN). Enrichissement "significativement recule" mais pas elimine.</span>
+        </div>
+        <div class="callout callout-blue">
+          <strong style="color:var(--blue);">ESCALADE LIBAN</strong><br>
+          <span style="color:var(--text2);">Katz ordonne "preparer expansion operations Liban." 100+ rockets/jour, salve de 200 en un seul tir (J11). <strong>IDF deploie 4 divisions au Liban.</strong> Parlement prolonge mandat 2 ans. Front full-scale = EN COURS.</span>
+        </div>
+        <div class="callout callout-green">
+          <strong style="color:var(--green);">RUSSIE = GAGNANT</strong><br>
+          <span style="color:var(--text2);">Putin offre petrole/gaz a Europe. Emissaire rencontre Trump en Floride. Trump: waiver 30j Inde acheter petrole russe. Sanctions russes allegees en vue. Bloomberg: "seul gagnant du conflit."</span>
+        </div>
+        <div class="callout callout-cyan">
+          <strong style="color:var(--cyan);">BLOCUS SELECTIF ORMUZ</strong><br>
+          <span style="color:var(--text2);">Iran tente un blocus a 2 vitesses: ferme a l'Ouest, "ouvert" a Chine/Inde/Russie. Mais ca ne fonctionne PAS en pratique (navire chinois frappe, 6 navires/jour en 9j). Cle: si l'Inde obtient un passage reel, ca change la donne energetique mondiale. Surveiller discussions Jaishankar-Araghchi.</span>
+        </div>
+        <div class="callout callout-orange">
+          <strong style="color:var(--orange);">SPR: PLASTER SUR HEMORRAGIE</strong><br>
+          <span style="color:var(--text2);">400M barils a ~2-3M/jour = 130-200 jours max. Remplace seulement 15-27% du deficit Ormuz. Infra US degradee (annees 70). Si Ormuz reste ferme &gt;3 mois, SPR s'epuise. SPR US post-release: 243M barils (34% capacite) = plus rien en reserve apres.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SOURCES ===== -->
+  <div class="card full-width">
+    <div class="card-header">
+      <span class="card-title">Sources</span>
+      <span class="card-badge info-bg">REFERENCES</span>
+    </div>
+    <div class="card-body">
+      <div style="font-size:11px;color:var(--text2);line-height:1.8;column-count:3;column-gap:20px;">
+        Wikipedia: 2026 Iran War, Timeline, Strait of Hormuz Crisis, Assassination of Ali Khamenei, Sinking of IRIS Dena<br>
+        Flashpoint: Operation Epic Fury escalation report<br>
+        CSIS: Iran Nuclear Program + Oil Prices + $3.7B/100h analysis<br>
+        Hudson Institute: Iran's Declining Capabilities<br>
+        Al Jazeera: Day 13 updates, 6 vessels attacked, UNSC Res. 2817, Beirut double-tap, Houthis analysis<br>
+        CNN: Oil tops $100, Parchin strike, nuclear capture analysis<br>
+        CNBC: Mojtaba Khamenei profile, Oil, $20B reinsurance<br>
+        NPR: Pentagon school probe (Tomahawk), Oil reserves<br>
+        NBC: Stryker cyberattack (Intune compromise), Day 13 live blog<br>
+        Axios: Iran cyber AI threats, Oil prices<br>
+        CBS News: Gas prices (+$0.48/semaine record)<br>
+        Fox News: Navy destruction, Operation Epic Fury<br>
+        The Hill: War cost $11.3B (6 jours)<br>
+        Army Times: 140 troops wounded<br>
+        Stars and Stripes: CENTCOM 6,000+ targets, MQ-9 losses<br>
+        JPost: IDF Taleghan/Parchin strike, missile rate -92%, ~2,410 fired<br>
+        Jerusalem Post: Iron Dome ~50% efficacy, IDF 4 divisions Liban<br>
+        Washington Post: Lebanon expansion, Ukraine drones<br>
+        Fortune, BNN Bloomberg: Brent $100+<br>
+        USNI News: French Navy 10 warships, Fleet Tracker<br>
+        Breaking Defense: UAE breakdown (186 detected, 812 drones), Bahrain (75+124), Kuwait (97+283)<br>
+        Bloomberg: Putin "only winner" opportunity<br>
+        UNHCR: 3.2M displaced in Iran<br>
+        Foreign Policy: Houthi calculus<br>
+        247 Wall St: S&amp;P 500 lowest since Nov 2025<br>
+        UK Parliament Research Briefing<br>
+        CFR: Europe's Disjointed Response<br>
+        Elysee: France/Germany/UK Joint Statement<br>
+        Refugees International, The New Humanitarian<br>
+        CEOBS: Environmental Harm<br>
+        UN News: Toxic rain warning<br>
+        EIA: Short-Term Energy Outlook<br>
+        Britannica: 2026 Iran Conflict<br>
+        DOE: SPR Quick Facts, 172M barrel release press release<br>
+        IEA: 400M barrel announcement, Strait of Hormuz oil security<br>
+        GAO: SPR infrastructure degradation report<br>
+        CRS: SPR Authorization, Operation and Drawdown Policy<br>
+        JPMorgan: SPR drawdown rate analysis<br>
+        Citigroup: Hormuz supply loss 11-16M bpd estimate<br>
+        Rigzone: IEA 400M release details<br>
+        Business Standard: Iran clears Indian tankers (claimed)<br>
+        Deccan Herald, Express Tribune: Iran denies India exemption<br>
+        Modern Diplomacy: India-Iran Hormuz dispute<br>
+        CSIS: "No one, not even Beijing, getting through Hormuz"<br>
+        DD News India: 70% crude imports outside Hormuz<br>
+        Defense Update, Naval News, USNI News: Military operations<br>
+        Palo Alto Unit 42, SOCRadar: Cyber threats<br>
+        JPMorgan (via Yahoo Finance): Market correction risk<br>
+        White House: Operation Epic Fury statement<br>
+        Britannica: 2026 Iran Conflict overview<br>
+        The Aviationist: F-35 first air-to-air kill (Yak-130)<br>
+        Janes: Iran mine stockpile 2,000-6,000, GPS jamming Hormuz<br>
+        IISS: Iran military degradation assessment<br>
+        Kitco: Gold $5,079 | OilPrice.com: Brent $101.20<br>
+        CBOE: VIX 27.29 (+12.6%) | Freddie Mac: Mortgage 6.29%
+      </div>
+    </div>
+  </div>
+
+</div><!-- /dashboard -->
+
+<div class="footer">
+  Iran War Dashboard &mdash; Suivi du conflit US-Israel vs Iran 2026 | Operation Epic Fury<br>
+  Donnees compilees de sources multiples | Derniere MAJ: 12 mars 2026, 16:00 EST<br>
+  <span style="color:var(--text2);font-size:10px;">Ce dashboard est a but informatif uniquement.</span>
+</div>
+
+<script>
+(function(){
+  var map = L.map('conflict-map', {
+    center: [28.5, 52],
+    zoom: 5,
+    zoomControl: true,
+    scrollWheelZoom: true
+  });
+
+  // Dark tile layer
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    maxZoom: 18
+  }).addTo(map);
+
+  // ===== LAYER GROUPS for toggling =====
+  var lyIranStrikes = L.layerGroup().addTo(map);
+  var lyNuclear     = L.layerGroup().addTo(map);
+  var lyUSBases     = L.layerGroup().addTo(map);
+  var lyAlliedFleet = L.layerGroup().addTo(map);
+  var lyEnergy      = L.layerGroup().addTo(map);
+  var lyShips       = L.layerGroup().addTo(map);
+  var lyLebanon     = L.layerGroup().addTo(map);
+  var lyRoutes      = L.layerGroup().addTo(map);
+  var lyAttackLines = L.layerGroup().addTo(map);
+  var lyOther       = L.layerGroup().addTo(map);
+
+  // Current target layer (set before each section)
+  var _ly = lyOther;
+
+  // Helper: circle marker
+  function mk(lat, lng, color, radius, popup, opts) {
+    opts = opts || {};
+    var m = L.circleMarker([lat, lng], {
+      radius: radius || 7,
+      fillColor: color,
+      color: opts.border || color,
+      weight: opts.weight || 2,
+      opacity: 0.9,
+      fillOpacity: opts.fillOpacity || 0.7
+    }).addTo(_ly);
+    if (popup) m.bindPopup(popup, {maxWidth: 360});
+    return m;
+  }
+
+  // Helper: pulsing marker for critical
+  function mkPulse(lat, lng, color, radius, popup) {
+    mk(lat, lng, color, radius + 6, null, {fillOpacity: 0.15, weight: 0});
+    return mk(lat, lng, color, radius, popup, {fillOpacity: 0.8});
+  }
+
+  // Helper: line
+  function line(coords, color, dash) {
+    L.polyline(coords, {color: color, weight: 2, opacity: 0.6, dashArray: dash || null}).addTo(_ly);
+  }
+
+  // ===== STRAIT OF HORMUZ (blockade zone) =====
+  _ly = lyShips;
+  L.polygon([
+    [26.9, 55.8], [26.0, 56.5], [25.3, 57.2], [25.6, 57.8],
+    [26.5, 57.4], [27.2, 56.3]
+  ], {color: '#ef4444', fillColor: '#ef4444', fillOpacity: 0.12, weight: 2, dashArray: '8,6'}).addTo(_ly)
+    .bindPopup('<span class="pop-red">DETROIT D\'ORMUZ</span><br>97% bloque | ~12 mines posees<br>22+ navires attaques | 66 transits en 9j<br>15-20M bpd normalement<br>Deficit reel: 11-16M bpd (Citigroup)<br><span class="pop-yellow">Blocus selectif: Chine/Inde conteste</span>');
+
+  // =========================================
+  //  IRAN - TEHERAN (cluster detaille)
+  // =========================================
+  _ly = lyIranStrikes;
+  mkPulse(35.70, 51.42, '#ef4444', 11,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/North_of_Tehran_Skyline_view.jpg/330px-North_of_Tehran_Skyline_view.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-red">TEHERAN - CENTRE DE COMMANDEMENT</span><br>' +
+    '&bull; <strong>Leadership House</strong>: Khamenei assassine (28 fev)<br>' +
+    '&bull; <strong>Assemblee des Experts</strong>: bombee en session (J4)<br>' +
+    '&bull; <strong>SNSC HQ</strong>: Conseil Securite Nationale detruit<br>' +
+    '&bull; <strong>Basij HQ</strong>: detruit<br>' +
+    '&bull; Mojtaba Khamenei blesse dans frappe');
+
+  // IRGC Malek-Ashtar HQ (central Tehran)
+  mk(35.72, 51.38, '#ef4444', 6,
+    '<span class="pop-red">QG IRGC MALEK-ASHTAR</span><br>Quartier general des Gardiens de la Revolution<br><span class="pop-red">DETRUIT</span> (J1-J2)<br>Batiment completement rase');
+
+  // IRIB State TV HQ
+  mk(35.73, 51.44, '#ef4444', 5,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/IRIB_east_gate_2.JPG/330px-IRIB_east_gate_2.JPG\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-red">IRIB - TELEVISION D\'ETAT</span><br>Siege principal a Teheran<br><span class="pop-red">DETRUIT</span> par frappe israelienne (J4)');
+
+  // Mehrabad Airport/Air Base (west Tehran)
+  mk(35.69, 51.31, '#ef4444', 7,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Mehrabad_Airport_Terminal_1%262.jpg/330px-Mehrabad_Airport_Terminal_1%262.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-red">MEHRABAD - AEROPORT / BASE AERIENNE</span><br><strong>16 avions IRGC detruits</strong> (J8)<br>Aeroport international frappe<br>Pistes endommagees');
+
+  // Karaj fuel depot (west of Tehran)
+  mk(35.81, 50.97, '#ef4444', 6,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Pearl_Palace_-Kakh_e_Morvarid-_Karaj_Iran.jpg/330px-Pearl_Palace_-Kakh_e_Morvarid-_Karaj_Iran.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-red">KARAJ - DEPOT CARBURANT</span><br>Frappe israelienne J9<br>Incendie massif | Riviere de feu<br>Contribue a la pluie toxique noire (J10)');
+
+  // Shehran area fuel depot (north Tehran)
+  mk(35.78, 51.36, '#ef4444', 5,
+    '<span class="pop-red">SHEHRAN - DEPOT / RAFFINERIE</span><br>Raffinerie de Teheran frappee J9<br>Fumee noire sur la ville');
+
+  // Aghdasiyeh fuel depot (NE Tehran)
+  mk(35.78, 51.47, '#ef4444', 5,
+    '<span class="pop-red">AGHDASIYEH - DEPOT CARBURANT</span><br>Frappe J9 | En feu<br>4 depots Teheran frappes simultanement');
+
+  // Gandhi Hospital (north Tehran)
+  mk(35.76, 51.41, '#a855f7', 5,
+    '<span class="pop-purple">HOPITAL GANDHI</span><br>Frappe par Israel (nord Teheran)<br>Installation medicale detruite<br>Condamnation internationale');
+
+  // =========================================
+  //  IRAN - SITES NUCLEAIRES
+  // =========================================
+  _ly = lyNuclear;
+  // Parchin/Taleghan (30km SE Tehran)
+  mk(35.52, 51.77, '#a855f7', 8,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Visit_of_Ali_Khamenei_to_Parchin_military_complex_%2867%29.jpg/330px-Visit_of_Ali_Khamenei_to_Parchin_military_complex_%2867%29.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-purple">PARCHIN / TALEGHAN</span><br>Complexe nucleaire AMAD<br><span class="pop-red">FRAPPE IDF le 12 mars (J13)</span><br>Reconstruit depuis oct 2024<br>30 km SE de Teheran');
+
+  // Isfahan (nuclear + air base)
+  mkPulse(32.65, 51.68, '#a855f7', 8,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Israeli_Airstrikes_on_the_Esfahan_Nuclear_Technology_Center_during_Operation_Rising_Lion.png/330px-Israeli_Airstrikes_on_the_Esfahan_Nuclear_Technology_Center_during_Operation_Rising_Lion.png\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-purple">ISFAHAN - NUCLEAIRE + BASE AERIENNE</span><br>&bull; <strong>Site nucleaire</strong>: inoperable (juin 2025)<br>&bull; <strong>~200 kg uranium enrichi</strong> stocke<br>&bull; <strong>Base aerienne TFB-8</strong>: flotte F-14 Tomcat detruite (J8)<br>&bull; Centre recherche nucleaire (UCF)');
+
+  // Natanz
+  mk(33.72, 51.73, '#a855f7', 7,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Atomanlage_Natanz_%282022%29.jpg/330px-Atomanlage_Natanz_%282022%29.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-purple">NATANZ</span><br>Site enrichissement uranium (centrifuges)<br><span class="pop-red">DETRUIT</span> (juin 2025)<br>Entree endommagee, souterrain inaccessible<br>Uranium enrichi encore stocke');
+
+  // Fordow (near Qom)
+  mk(34.88, 51.59, '#a855f7', 7,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Fordow_Enrichment_Plant_graphic_June_25_2025.jpg/330px-Fordow_Enrichment_Plant_graphic_June_25_2025.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-purple">FORDOW (pres Qom)</span><br>Site enrichissement souterrain<br><span class="pop-red">DETRUIT</span> (juin 2025)<br>Enfoui dans montagne<br>Aucune reprise detectee par AIEA');
+
+  // Arak heavy water reactor
+  mk(34.38, 49.24, '#a855f7', 5,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Arak_Heavy_Water4.JPG/330px-Arak_Heavy_Water4.JPG\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-purple">ARAK</span><br>Reacteur eau lourde IR-40<br>Modifie post-JCPOA<br>Status: non-operationnel');
+
+  // Bushehr nuclear power plant
+  mk(28.83, 50.88, '#a855f7', 5,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Bushehr_Nuclear_Plant.jpg/330px-Bushehr_Nuclear_Plant.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-purple">BUSHEHR - CENTRALE NUCLEAIRE</span><br>Reacteur civil (1,000 MW)<br>Construit par Russie<br>Non ciblee directement (risque contamination)');
+
+  // =========================================
+  //  IRAN - BASES AERIENNES
+  // =========================================
+  _ly = lyIranStrikes;
+  // Shiraz TFB-7
+  mk(29.54, 52.59, '#ef4444', 6,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Darvaze_Ghoran11.jpg/330px-Darvaze_Ghoran11.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-red">SHIRAZ - BASE AERIENNE TFB-7</span><br>7e Base Tactique de Chasse<br><span class="pop-red">FRAPPEE</span> (J5)<br>Avions de combat endommages/detruits');
+
+  // Bushehr air base
+  mk(28.97, 50.84, '#ef4444', 6,
+    '<span class="pop-red">BUSHEHR - AEROPORT / BASE</span><br>Aeroport frappe (J4)<br>Iran Air Airbus A319 detruit sur le tarmac');
+
+  // Tabriz air base TFB-2
+  mk(38.13, 46.24, '#ef4444', 6,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Tabriz_Municipality_Sa%27at_Tower.jpg/330px-Tabriz_Municipality_Sa%27at_Tower.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-red">TABRIZ - BASE AERIENNE TFB-2</span><br>2e Base Tactique de Chasse<br>F-5 Tiger / Mirage F1<br><span class="pop-red">FRAPPEE</span> - Pistes et hangars endommages');
+
+  // Dezful / Vahdati air base
+  mk(32.43, 48.38, '#ef4444', 6,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/%D8%A2%D8%B1%D8%A7%D9%85%DA%AF%D8%A7%D9%87_%DB%8C%D8%B9%D9%82%D9%88%D8%A8_%D9%84%DB%8C%D8%AB_%D8%B5%D9%81%D8%A7%D8%B1%DB%8C%D8%8C%D8%A7%D9%88%D9%84%DB%8C%D9%86_%D8%B4%D9%87%D8%B1%DB%8C%D8%A7%D8%B1_%D8%A7%DB%8C%D8%B1%D8%A7%D9%86%DB%8C_%D8%A8%D8%B9%D8%AF_%D8%A7%D8%B2_%D8%A7%D8%B3%D9%84%D8%A7%D9%857.jpg/330px-%D8%A2%D8%B1%D8%A7%D9%85%DA%AF%D8%A7%D9%87_%DB%8C%D8%B9%D9%82%D9%88%D8%A8_%D9%84%DB%8C%D8%AB_%D8%B5%D9%81%D8%A7%D8%B1%DB%8C%D8%8C%D8%A7%D9%88%D9%84%DB%8C%D9%86_%D8%B4%D9%87%D8%B1%DB%8C%D8%A7%D8%B1_%D8%A7%DB%8C%D8%B1%D8%A7%D9%86%DB%8C_%D8%A8%D8%B9%D8%AF_%D8%A7%D8%B2_%D8%A7%D8%B3%D9%84%D8%A7%D9%857.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-red">DEZFUL - BASE VAHDATI</span><br>4e Base de Chasse (F-5E/F)<br><span class="pop-red">FRAPPEE</span> - Infrastructure endommagee');
+
+  // Hamadan / Nojeh air base
+  mk(35.21, 48.65, '#ef4444', 6,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Hamedan_13971219000404636878130198589248_82460_PhotoT.jpg/330px-Hamedan_13971219000404636878130198589248_82460_PhotoT.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-red">HAMADAN - BASE NOJEH</span><br>3e Base Tactique<br>Su-24 Fencer / F-7<br><span class="pop-red">FRAPPEE</span>');
+
+  // Bandar Abbas air base / Havadarya
+  mk(27.16, 56.17, '#ef4444', 6,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Bandarabbas-sahel-2.jpg/330px-Bandarabbas-sahel-2.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-red">BANDAR ABBAS - BASE HAVADARYA</span><br>9e Base Tactique de Chasse<br>Zone strategique pres d\'Ormuz<br><span class="pop-red">FRAPPEE</span>');
+
+  // Omidiyeh air base
+  mk(30.83, 49.53, '#ef4444', 5,
+    '<span class="pop-red">OMIDIYEH - BASE AERIENNE</span><br>Base Phantom F-4E<br>Proche frontiere irakienne<br><span class="pop-red">FRAPPEE</span>');
+
+  // Chahbahar air base (far SE)
+  mk(25.44, 60.38, '#ef4444', 5,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Chabahar_coast.jpg/330px-Chabahar_coast.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-red">CHAHBAHAR - BASE AERIENNE</span><br>Base IRGC Air Force<br>Golfe d\'Oman (hors detroit)<br><span class="pop-red">FRAPPEE</span>');
+
+  // =========================================
+  //  IRAN - BASES NAVALES / IRGC NAVY
+  // =========================================
+  _ly = lyIranStrikes;
+  // Bandar Abbas - IRGC Navy HQ
+  mkPulse(27.19, 56.28, '#ef4444', 7,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Bandarabbas-sahel-2.jpg/330px-Bandarabbas-sahel-2.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-red">BANDAR ABBAS - QG MARINE IRGC</span><br>Quartier general de la marine iranienne<br>11 navires detruits dans le Golfe d\'Oman<br>Port principal de la marine<br><span class="pop-red">DETRUIT</span>');
+
+  // Jask naval base
+  mk(25.64, 57.77, '#ef4444', 5,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Cape_of_Jask_%D8%AF%D9%85%D8%A7%D8%BA%D9%87_%D8%AC%D8%A7%D8%B3%DA%A9_-_panoramio.jpg/330px-Cape_of_Jask_%D8%AF%D9%85%D8%A7%D8%BA%D9%87_%D8%AC%D8%A7%D8%B3%DA%A9_-_panoramio.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-red">JASK - BASE NAVALE</span><br>Base avancee marine iranienne<br>Golfe d\'Oman, flanc est du detroit<br>Vedettes rapides / sous-marins');
+
+  // Bushehr naval base
+  mk(28.91, 50.82, '#ef4444', 5,
+    '<span class="pop-red">BUSHEHR - BASE NAVALE</span><br>Port militaire iranien<br>Corvettes et patrouilleurs');
+
+  // Bandar Anzali (Caspian - not targeted)
+  mk(37.47, 49.46, '#94a3b8', 4,
+    '<span style="color:var(--text2);font-weight:700;">BANDAR ANZALI - Mer Caspienne</span><br>Base navale Caspienne<br>Non ciblée (pas de route vers Ormuz)');
+
+  // Qeshm Island (IRGC staging)
+  mk(26.88, 56.00, '#ef4444', 5,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Hara_Jungle_3366255.jpg/330px-Hara_Jungle_3366255.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-red">ILE DE QESHM</span><br>Base IRGC | Vedettes rapides<br>Zone de staging pour attaques Ormuz<br>Poseurs de mines partent d\'ici');
+
+  // Larak Island
+  mk(26.86, 56.36, '#ef4444', 4,
+    '<span class="pop-red">ILE DE LARAK</span><br>Terminal petrolier iranien<br>Base vedettes IRGC<br>Position strategique dans le detroit');
+
+  // Abu Musa Island (disputed)
+  mk(25.87, 55.03, '#ef4444', 4,
+    '<span class="pop-red">ILE D\'ABU MUSA</span><br>Base IRGC (ile disputee avec UAE)<br>Missiles anti-navires<br>Position avancee dans le Golfe');
+
+  // Kharg Island (oil terminal)
+  mk(29.24, 50.31, '#22c55e', 6,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/ISS005-E-11900_lrg.jpg/330px-ISS005-E-11900_lrg.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-green">ILE DE KHARG</span><br>Terminal petrolier majeur Iran<br>90% des exportations petrolieres iraniennes<br>Non frappe (risque maree noire catastrophique)');
+
+  // =========================================
+  //  IRAN - SITES MISSILES / DEFENSE
+  // =========================================
+  _ly = lyIranStrikes;
+  // Shahid Modarres missile base (near Tabriz)
+  mk(37.95, 46.40, '#ef4444', 5,
+    '<span class="pop-red">BASE MISSILES (region Tabriz)</span><br>Site stockage/lancement missiles balistiques<br>Shahab-3 / Emad / Ghadr<br><span class="pop-red">FRAPPE</span> - Capacite -90%');
+
+  // Shahid Bagheri base (near Tehran)
+  mk(35.55, 51.60, '#ef4444', 5,
+    '<span class="pop-red">BASE MISSILES SHAHID BAGHERI</span><br>Programme missiles balistiques IRGC<br>Region Teheran<br><span class="pop-red">FRAPPE</span>');
+
+  // Imam Ali base (near Isfahan)
+  mk(32.50, 51.90, '#ef4444', 5,
+    '<span class="pop-red">BASE IMAM ALI (Isfahan)</span><br>Missiles a moyenne portee<br>Souterraine / renforcee<br><span class="pop-red">FRAPPE</span>');
+
+  // Semnan missile test site
+  mk(35.23, 53.92, '#ef4444', 5,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Shah_%28Imam%29-Soltani_Mosque._Semnan_6.jpg/330px-Shah_%28Imam%29-Soltani_Mosque._Semnan_6.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-red">SEMNAN - SITE TEST MISSILES</span><br>Centre d\'essais missiles / lanceurs spatiaux<br><span class="pop-red">FRAPPE</span>');
+
+  // Kerman missile base area
+  mk(30.28, 57.08, '#ef4444', 5,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/%D9%85%D8%AC%D9%85%D9%88%D8%B9%D9%87_%DA%AF%D9%86%D8%AC%D8%B9%D9%84%DB%8C%D8%AE%D8%A7%D9%86.jpg/330px-%D9%85%D8%AC%D9%85%D9%88%D8%B9%D9%87_%DA%AF%D9%86%D8%AC%D8%B9%D9%84%DB%8C%D8%AE%D8%A7%D9%86.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-red">KERMAN - INSTALLATIONS MISSILES</span><br>Bases missiles IRGC<br>Region sud-est Iran<br><span class="pop-red">FRAPPE</span>');
+
+  // S-300 defense (near Isfahan - main battery)
+  mk(32.80, 51.50, '#ef4444', 4,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/S-300_-_2009_Moscow_Victory_Day_Parade_%282%29.jpg/330px-S-300_-_2009_Moscow_Victory_Day_Parade_%282%29.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-red">BATTERIE S-300 (Isfahan)</span><br>Defense aerienne russe S-300PMU2<br><span class="pop-red">RADAR DETRUIT</span><br>Dominance aerienne US/IL achevee');
+
+  // S-300 defense (near Bushehr)
+  mk(29.10, 50.80, '#ef4444', 4,
+    '<span class="pop-red">BATTERIE S-300 (Bushehr)</span><br>Protégeait centrale nucléaire<br><span class="pop-red">NEUTRALISEE</span>');
+
+  // =========================================
+  //  IRAN - SCHOOL / CIVILIAN
+  // =========================================
+  _ly = lyIranStrikes;
+  mk(27.13, 57.08, '#a855f7', 8,
+    '<span class="pop-red">MINAB - ECOLE SHAJAREH TAYYEBEH</span><br>168-180 enfants tues (28 fev)<br><span class="pop-red">Pentagon: TOMAHAWK US (enquete J13)</span><br>Ancienne base navale IRGC<br>Sur liste de cibles desactualisee<br>Bellingcat + BBC Verify confirment');
+
+  // Abadan refinery (major)
+  mk(30.35, 48.28, '#ef4444', 5,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Abadan_Catalitic_facilities.jpg/330px-Abadan_Catalitic_facilities.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-red">ABADAN - RAFFINERIE</span><br>Plus grande raffinerie historique d\'Iran<br>Zone frontaliere avec Irak<br>Status: endommage/en service reduit');
+
+  // =========================================
+  //  BASES US / COALITION (detaille)
+  // =========================================
+  _ly = lyUSBases;
+  // Bahrain - 5th Fleet NSA
+  mkPulse(26.23, 50.62, '#3b82f6', 8,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/US_Navy_050816-N-9563N-006_New_chief_petty_officer_%28CPO%29_selectees_perform_morning_colors_on_board_Naval_Support_Activity_%28NSA%29_Bahrain.jpg/330px-US_Navy_050816-N-9563N-006_New_chief_petty_officer_%28CPO%29_selectees_perform_morning_colors_on_board_Naval_Support_Activity_%28NSA%29_Bahrain.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-blue">BAHREIN - NSA / QG 5e FLOTTE US</span><br>45 missiles + 9 drones Iran (J1)<br><span class="pop-red">QG touche</span><br>Depots carburant Muharraq en feu (J13)');
+
+  // Qatar - Al Udeid AFB
+  mk(25.12, 51.31, '#3b82f6', 8,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Flight_Line_Fest_2016_160110-F-YM354-030.jpg/330px-Flight_Line_Fest_2016_160110-F-YM354-030.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-blue">AL UDEID AFB (Qatar)</span><br>Plus grande base US au Moyen-Orient<br>44+ missiles + 8+ drones (J1)<br>Tout intercepte | Centre ops CENTCOM');
+
+  // Qatar - Ras Laffan LNG
+  mk(25.93, 51.53, '#eab308', 6,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Ras_Laffan_LNG_terminal_in_2012.jpg/330px-Ras_Laffan_LNG_terminal_in_2012.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-yellow">RAS LAFFAN (Qatar)</span><br>Plus grande usine LNG au monde<br><span class="pop-red">PRODUCTION ARRETEE</span><br>Frappee / zone de danger');
+
+  // Kuwait - Ali Al Salem AB
+  mk(29.35, 47.52, '#3b82f6', 7,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Alihangar1.jpg/330px-Alihangar1.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-blue">ALI AL SALEM AFB (Koweit)</span><br>Base aerienne US/Koweit<br>Frappee par missiles + drones Iran (J1)<br>Drone frappe aeroport civil Kuwait');
+
+  // Kuwait - Camp Arifjan / Shuaiba Port
+  mk(29.07, 48.10, '#3b82f6', 7,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Camp_Arifjan_storage_from_air.jpg/330px-Camp_Arifjan_storage_from_air.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-blue">CAMP ARIFJAN / PORT SHUAIBA</span><br><span class="pop-red">6 soldats US tues (103e Sustainment Cmd, J2)</span><br>Centre ops frappe par missile Iran<br>Tir ami: F/A-18 abat 3 F-15E US<br>Ambassade US frappee');
+
+  // UAE - Al Dhafra AB
+  mk(24.25, 54.55, '#3b82f6', 7,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Two_R-11_fuel_trucks_refuel_an_E-3_Sentry_of_the_380th_Air_Expeditionary_Wing.jpg/330px-Two_R-11_fuel_trucks_refuel_an_E-3_Sentry_of_the_380th_Air_Expeditionary_Wing.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-blue">AL DHAFRA AFB (UAE)</span><br>Base aerienne US/FR pres Abu Dhabi<br>F-35, F-22, Rafale<br>268 balistiques + 1,514 drones Iran au total UAE');
+
+  // UAE - Dubai
+  mk(25.20, 55.27, '#f97316', 6,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/en/thumb/c/c7/Burj_Khalifa_2021.jpg/330px-Burj_Khalifa_2021.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-orange">DUBAI</span><br>Drone sur Address Creek Harbour tower (J13)<br>4 blesses pres aeroport<br>Citibank ferme toutes branches sauf 1');
+
+  // Saudi Arabia - Prince Sultan AB
+  mk(24.06, 47.58, '#3b82f6', 6,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/363daew-saudi-princesltan-e3a.jpg/330px-363daew-saudi-princesltan-e3a.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-blue">PRINCE SULTAN AFB (Arabie)</span><br>Base aerienne US (378th AEW)<br>F-15E, F-16, Patriot<br>Intercepte missiles/drones iraniens');
+
+  // Saudi Arabia - Riyadh
+  mk(24.71, 46.68, '#f97316', 6,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Riyadh_Skyline.jpg/330px-Riyadh_Skyline.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-orange">RIYAD</span><br>Missiles Iran interceptes<br>Drones vers district ambassades (J13)<br>1 drone abattu');
+
+  // Saudi Arabia - Shaybah oilfield
+  mk(22.52, 54.01, '#f97316', 6,
+    '<span class="pop-orange">SHAYBAH (Arabie)</span><br>Champ petrolier majeur<br>2 drones interceptes au-dessus Empty Quarter (J13)');
+
+  // Saudi Arabia - Abqaiq oil processing
+  mk(25.94, 49.68, '#22c55e', 6,
+    '<span class="pop-green">ABQAIQ (Arabie)</span><br>Plus grand centre traitement petrole monde<br>Depart pipeline East-West vers Yanbu<br>Cible de haute valeur (attaque 2019)');
+
+  // Iraq - Basra oil terminal
+  mk(29.78, 48.80, '#eab308', 6,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Basra_city.jpg/330px-Basra_city.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-yellow">BASRA (Irak)</span><br>Terminal petrolier <span class="pop-red">FERME</span> (J13)<br>Exports -800K bpd<br>Production Irak: 4.3M &rarr; 1.3M bpd');
+
+  // Djibouti - Camp Lemonnier
+  mk(11.55, 43.15, '#3b82f6', 5,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/22nd_MEU_Harrier_pilots_train_with_French_Mirage_pilots_140330-M-HZ646-232.jpg/330px-22nd_MEU_Harrier_pilots_train_with_French_Mirage_pilots_140330-M-HZ646-232.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-blue">CAMP LEMONNIER (Djibouti)</span><br>Base US permanente en Afrique<br>4,000+ militaires<br>Drone, renseignement, operations speciales');
+
+  // Jordan - Al Tanf (Syria border)
+  mk(33.51, 38.67, '#3b82f6', 4,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Al-Tanf.jpg/330px-Al-Tanf.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-blue">AL TANF (Syrie/Jordanie)</span><br>Garnison US a la frontiere<br>Zone de deconflit 55 km');
+
+  // =========================================
+  //  LIBAN / ISRAEL (detaille)
+  // =========================================
+  _ly = lyLebanon;
+  mkPulse(33.89, 35.50, '#f97316', 8,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Beirut_close_to_plane_descent.jpg/330px-Beirut_close_to_plane_descent.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-orange">BEYROUTH / DAHIYEH</span><br>630+ morts | 800K deplaces<br><strong>Double-tap Ramlet al-Baida</strong>: 8 tues J13<br>Dahiyeh (banlieue sud) re-frappee<br>Evacuations sud riviere Zahrani<br>Hezbollah: 100+ rockets/jour vers Israel<br>Katz: "prendre du territoire"<br>Parlement prolonge mandat 2 ans');
+
+  mk(33.27, 35.20, '#f97316', 5,
+    '<span class="pop-orange">SUD LIBAN (Zahrani)</span><br>Zone d\'evacuation israelienne<br>Operations terrestres menacees<br>Katz ordonne "preparer expansion"');
+
+  mk(32.08, 34.78, '#f97316', 7,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Sarona_CBD_01_%28cropped%29.jpg/330px-Sarona_CBD_01_%28cropped%29.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-orange">TEL AVIV</span><br>10 balistiques multi-ogives IRGC (J13)<br>Operation conjointe IRGC-Hezbollah<br>13 morts, 124+ blesses total<br>14 soldats + 179 civils blesses (24h)');
+
+  mk(32.79, 35.00, '#f97316', 5,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/The_Hanging_Gardens_of_Haifa%2C_Israel_%2850099173503%29_%28cropped%29.jpg/330px-The_Hanging_Gardens_of_Haifa%2C_Israel_%2850099173503%29_%28cropped%29.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-orange">HAIFA</span><br>Cible missiles balistiques iraniens<br>Sirenes en continu');
+
+  mk(31.29, 34.26, '#3b82f6', 5,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/2016-12-12_First_two_F-35s_in_Israel.jpg/330px-2016-12-12_First_two_F-35s_in_Israel.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-blue">NEVATIM AFB (Israel)</span><br>Base F-35I Adir<br>Escadrons de frappes strategiques');
+
+  mk(30.78, 34.67, '#3b82f6', 5,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/ATC_tower_in_Ramon_IAF_base.jpg/330px-ATC_tower_in_Ramon_IAF_base.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-blue">RAMON AFB (Israel)</span><br>Base aerienne tactique<br>F-16I Sufa | Operations Roaring Lion');
+
+  mk(31.90, 34.68, '#3b82f6', 4,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/IDF_Iron_Dome_2021.jpg/330px-IDF_Iron_Dome_2021.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-blue">PALMACHIM AFB (Israel)</span><br>Base missiles / spatial<br>Arrow, Iron Dome, David\'s Sling');
+
+  // =========================================
+  //  NAVIRES ATTAQUES (Ormuz / Golfe)
+  // =========================================
+  _ly = lyShips;
+  mk(26.56, 56.25, '#eab308', 5, '<span class="pop-yellow">SKYLIGHT</span> J1 | 2 morts indiens');
+  mk(26.45, 56.45, '#eab308', 5, '<span class="pop-yellow">MKD VYOM</span> J1 | Drone-bateau | 1 mort');
+  mk(26.15, 56.85, '#eab308', 5, '<span class="pop-yellow">SAFESEA VISHNU</span> J13 | Drone kamikaze | 1 mort');
+  mk(26.25, 56.65, '#eab308', 5, '<span class="pop-yellow">ZEFYROS</span> J13 | Tanker Malta en feu');
+  mk(26.05, 56.95, '#eab308', 5, '<span class="pop-yellow">MAYUREE NAREE</span> J13 | 3 disparus | Oman sauve 20');
+  mk(25.60, 55.70, '#eab308', 5, '<span class="pop-yellow">CONTAINER JEBEL ALI</span> J13 | 35 NM N Dubai');
+  mk(26.48, 56.55, '#eab308', 5, '<span class="pop-yellow">ONE MAJESTY</span> J13 | Container Japon');
+  mk(26.38, 56.72, '#eab308', 5, '<span class="pop-yellow">STAR GWYNETH</span> J13 | Bulk carrier');
+
+  // Mine zone (larger overlay)
+  L.circle([26.35, 56.45], {radius: 25000, color: '#eab308', fillColor: '#eab308', fillOpacity: 0.08, weight: 1, dashArray: '4,4'}).addTo(_ly)
+    .bindPopup('<span class="pop-yellow">ZONE DE MINES ACTIVE</span><br>~12 mines posees depuis J11<br>28 poseurs detruits (Trump) / 16 (CENTCOM)<br>Iran conserve 80-90% vedettes<br>Deminage = semaines/mois');
+
+  // =========================================
+  //  OMAN + IRIS DENA
+  // =========================================
+  _ly = lyShips;
+  mk(16.93, 54.01, '#f97316', 7,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Dunst_Oman_scan0322_-_Burj_al_Nahda.jpg/330px-Dunst_Oman_scan0322_-_Burj_al_Nahda.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-orange">SALALAH (OMAN)</span><br>Drone frappe depots carburant du port<br>Incendie majeur | Maersk suspend<br>Sultan condamne Iran');
+
+  mk(7.50, 79.50, '#ef4444', 8,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Iranian_naval_personnel_reunite_with_their_family_after_the_first_voyage_around_the_world_%2803%29.jpg/330px-Iranian_naval_personnel_reunite_with_their_family_after_the_first_voyage_around_the_world_%2803%29.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-red">IRIS DENA (au large Sri Lanka)</span><br>Fregate iranienne torpillee par USS Charlotte<br>2 torpilles Mark 48 | 87+ tues, 61 disparus<br>1er torpillage US depuis WW2 (4 mars)<br>3 ADF australiens a bord (AUKUS)');
+
+  // =========================================
+  //  BYPASS PIPELINES / ENERGY
+  // =========================================
+  _ly = lyEnergy;
+  line([[25.94, 49.68], [25.50, 48.50], [24.50, 45.00], [24.09, 38.06]], '#22c55e', '6,4');
+  mk(24.09, 38.06, '#22c55e', 7,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Yanbu_Beach_1.jpg/330px-Yanbu_Beach_1.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-green">YANBU (Arabie)</span><br>Terminal Mer Rouge (export)<br>Pipeline East-West: bypass Ormuz<br>Capacite: ~5M bpd<br>Alternative critique si Ormuz ferme');
+
+  // Habshan-Fujairah pipeline
+  line([[24.10, 54.00], [25.12, 56.33]], '#22c55e', '6,4');
+  mk(25.12, 56.33, '#22c55e', 6,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Hills_in_Fujairah_2012_01.jpg/330px-Hills_in_Fujairah_2012_01.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-green">FUJAIRAH (UAE)</span><br>Terminal hors detroit<br>Pipeline Habshan-Fujairah: 1.5M bpd bypass<br>Stockage strategique UAE');
+
+  // Kharg Island
+  mk(29.24, 50.31, '#22c55e', 6,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/ISS005-E-11900_lrg.jpg/330px-ISS005-E-11900_lrg.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-green">ILE DE KHARG (Iran)</span><br>90% des exports petroliers iraniens<br>Non frappee (risque maree noire)<br>Terminal petrole majeur');
+
+  // =========================================
+  //  FLOTTES ALLIEES (Carrier Strike Groups)
+  // =========================================
+  _ly = lyAlliedFleet;
+
+  // USS Abraham Lincoln CSG - Arabian Sea
+  mkPulse(23.0, 62.0, '#06b6d4', 10,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/USS_Abraham_Lincoln_%28CVN-72%29_underway_in_the_Atlantic_Ocean_on_30_January_2019_%28190130-N-PW716-1312%29.JPG/330px-USS_Abraham_Lincoln_%28CVN-72%29_underway_in_the_Atlantic_Ocean_on_30_January_2019_%28190130-N-PW716-1312%29.JPG\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-cyan">CSG-3: USS ABRAHAM LINCOLN (CVN-72)</span><br>' +
+    '<strong>Position:</strong> Mer d\'Arabie (nord)<br>' +
+    '<strong>Depart:</strong> San Diego, 21 nov 2025<br>' +
+    '<strong>Route:</strong> Pacifique → Mer Chine Sud → Malacca → Ocean Indien<br>' +
+    '<strong>Escorte:</strong><br>' +
+    '&bull; DESRON 21 (3 destroyers Arleigh Burke)<br>' +
+    '&bull; USS Spruance (DDG-111)<br>' +
+    '&bull; USS Michael Murphy (DDG-112)<br>' +
+    '&bull; USS Frank E. Petersen Jr. (DDG-121)<br>' +
+    '&bull; CVW-9: VFA-14 Tophatters (F/A-18E)<br>' +
+    '<span class="pop-green">Op. Epic Fury — support aerien</span>');
+
+  // USS Gerald R. Ford CSG - Red Sea
+  mkPulse(20.0, 38.5, '#06b6d4', 10,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/USS_Gerald_R._Ford_%28CVN-78%29_underway_in_the_Atlantic_Ocean_on_9_October_2022_%28221009-N-TL968-1248%29.JPG/330px-USS_Gerald_R._Ford_%28CVN-78%29_underway_in_the_Atlantic_Ocean_on_9_October_2022_%28221009-N-TL968-1248%29.JPG\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-cyan">CSG-12: USS GERALD R. FORD (CVN-78)</span><br>' +
+    '<strong>Position:</strong> Mer Rouge (centre)<br>' +
+    '<strong>Depart:</strong> Norfolk, 24 juin 2025 (255+ jours en mer!)<br>' +
+    '<strong>Route:</strong> Atlantique → Gibraltar → Med → Suez (5 mars) → Mer Rouge<br>' +
+    '<strong>Escorte:</strong><br>' +
+    '&bull; DESRON 2 (destroyers Aegis)<br>' +
+    '&bull; USS Bainbridge (DDG-96)<br>' +
+    '&bull; USS Mahan (DDG-72)<br>' +
+    '<span class="pop-green">Controle Mer Rouge / flanc sud</span>');
+
+  // USS George H.W. Bush CSG - Norfolk (preparing)
+  mk(36.9, -76.3, '#06b6d4', 8,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/US_Navy_110129-N-3885H-158_USS_George_H.W._Bush_%28CVN_77%29_is_underway_in_the_Atlantic_Ocean.jpg/330px-US_Navy_110129-N-3885H-158_USS_George_H.W._Bush_%28CVN_77%29_is_underway_in_the_Atlantic_Ocean.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-cyan">CSG-10: USS G.H.W. BUSH (CVN-77)</span><br>' +
+    '<strong>Position:</strong> Norfolk, VA<br>' +
+    '<strong>Status:</strong> COMPTUEX complete 5 mars<br>' +
+    '<strong>Route prevue:</strong> Atlantique → Gibraltar → Med Est<br>' +
+    '3e porte-avions en preparation<br>' +
+    '<span class="pop-yellow">Deploiement imminent</span>');
+
+  // FS Charles de Gaulle CSG - Eastern Med
+  mkPulse(34.5, 33.0, '#06b6d4', 9,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/French_aircraft_carrier_Charles_de_Gaulle_%28R91%29_underway_in_the_Ionian_Sea_on_17_March_2022_%28220317-N-DH793-1322%29cropped.JPG/330px-French_aircraft_carrier_Charles_de_Gaulle_%28R91%29_underway_in_the_Ionian_Sea_on_17_March_2022_%28220317-N-DH793-1322%29cropped.JPG\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-cyan">FS CHARLES DE GAULLE (R91) — FRANCE</span><br>' +
+    '<strong>Position:</strong> Med Est, sud de Chypre<br>' +
+    '<strong>Redeploy:</strong> depuis Baltique/Suede apres frappe drone sur RAF Akrotiri (1 mars)<br>' +
+    '<strong>Route:</strong> Mer du Nord → Manche → Biscaye → Gibraltar → Med<br>' +
+    '<strong>Groupe aerien:</strong> Rafale M + E-2C Hawkeye<br>' +
+    '<strong>Escorte:</strong><br>' +
+    '&bull; FS Chevalier Paul (D621) — destroyer AA Horizon<br>' +
+    '&bull; FREMM (fregate)<br>' +
+    '&bull; SNA Suffren (sous-marin nucleaire)<br>' +
+    '&bull; ESPS Cristobal Colon (F105) — Espagne<br>' +
+    '&bull; HNLMS Evertsen (F805) — Pays-Bas<br>' +
+    '<strong>Macron (9 mars):</strong> +8 fregates + 2 Mistral (LHD)<br>' +
+    '<span class="pop-green">Total FR: ~13 navires | Plus gros deploiement FR depuis Suez 1956</span>');
+
+  // HMS Dragon - in transit Mediterranean
+  mk(36.0, 10.0, '#06b6d4', 6,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Royal_Navy_Type_45_Destroyer_HMS_Dragon_MOD_45153124.jpg/330px-Royal_Navy_Type_45_Destroyer_HMS_Dragon_MOD_45153124.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-cyan">HMS DRAGON (D35) — UK</span><br>' +
+    '<strong>Type 45 destroyer (defense aerienne)</strong><br>' +
+    '<strong>Depart:</strong> Portsmouth, 10 mars<br>' +
+    '<strong>Route:</strong> Manche → Gibraltar → Med Est → Chypre<br>' +
+    'Sea Viper / radar avance<br>' +
+    'Mission: protection RAF Akrotiri<br>' +
+    '<span class="pop-yellow">EN TRANSIT (12 mars)</span>');
+
+  // HMS Prince of Wales - Portsmouth (standby)
+  mk(50.8, -1.1, '#06b6d4', 7,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/VX-23_F-35B_approaches_HMS_Prince_of_Wales.jpg/330px-VX-23_F-35B_approaches_HMS_Prince_of_Wales.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-cyan">HMS PRINCE OF WALES (R09) — UK</span><br>' +
+    '<strong>Position:</strong> Portsmouth<br>' +
+    'Preavis deploiement: 10j → 5j (7 mars)<br>' +
+    '<span class="pop-yellow">EN PREPARATION — pas encore deploye</span><br>' +
+    'Si deploye: 2e porte-avions allie dans la zone');
+
+  // LCS MCM Squadron - Bahrain (mine clearing)
+  mk(26.35, 50.55, '#06b6d4', 6,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/USS_Gabrielle_Giffords_%28LCS-10%29_underway_in_the_Philippine_Sea_on_1_October_2019_%28191001-N-YI115-2128%29.JPG/330px-USS_Gabrielle_Giffords_%28LCS-10%29_underway_in_the_Philippine_Sea_on_1_October_2019_%28191001-N-YI115-2128%29.JPG\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-cyan">ESCADRON MCM (Deminage) — Bahrein</span><br>' +
+    '&bull; USS Canberra (LCS-30)<br>' +
+    '&bull; USS Tulsa (LCS-16)<br>' +
+    '&bull; USS Santa Barbara (LCS-32)<br>' +
+    'Knifefish UUV + sonar AN/AQS-20C<br>' +
+    'MH-53E Sea Dragon (helis deminage)<br>' +
+    '<span class="pop-red">GAP: derniers Avenger retires sept 2025</span><br>' +
+    '<span class="pop-red">UK: HMS Middleton PARTI (aucun RN dans le Golfe)</span><br>' +
+    'Deminage: semaines/mois estime');
+
+  // European coalition near Cyprus
+  mk(34.9, 33.5, '#06b6d4', 5,
+    '<span class="pop-cyan">COALITION EUROPEENNE (Chypre)</span><br>' +
+    '&bull; Italie: 1+ fregate<br>' +
+    '&bull; Grece: 1+ fregate<br>' +
+    '&bull; Espagne: ESPS Cristobal Colon (avec CdG)<br>' +
+    '&bull; Pays-Bas: HNLMS Evertsen (avec CdG)<br>' +
+    '<strong>Total Europe: 15+ navires en Med Est</strong><br>' +
+    'Defense Chypre + interception missiles');
+
+  // EUNAVFOR Aspides - Hormuz escort preparation
+  mk(25.5, 58.0, '#06b6d4', 7,
+    '<span class="pop-cyan">ZONE ASSEMBLAGE — Op. EPIC ESCORT</span><br>' +
+    '<strong>Golfe d\'Oman — 150+ navires ancres</strong><br>' +
+    'Trafic Ormuz: quasi-ZERO<br>' +
+    'Wright (12 mars): "Navy PAS PRETE" pour escorte<br>' +
+    'Macron: mission escorte multinationale en organisation<br>' +
+    'EUNAVFOR Aspides: 2 FR + 5 fregates EU pledged<br>' +
+    '<span class="pop-red">Corridor escorte: fin mars au plus tot</span>');
+
+  // =========================================
+  //  INTERNATIONAL
+  // =========================================
+  _ly = lyOther;
+  mk(55.75, 37.62, '#22c55e', 6,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Saint_Basil%27s_Cathedral_and_the_Red_Square.jpg/330px-Saint_Basil%27s_Cathedral_and_the_Red_Square.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-green">MOSCOU</span><br>"Seul gagnant" du conflit (Bloomberg)<br>Offre petrole/gaz a Europe<br>Emissaire rencontre Trump en Floride<br>Soutien "inebranlable" a Mojtaba');
+
+  mk(19.07, 72.88, '#06b6d4', 6,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/%E0%A6%93%E0%A6%B0%E0%A6%B2%E0%A6%BF%E0%A6%B0_%E0%A6%97%E0%A6%97%E0%A6%A8%E0%A6%B0%E0%A7%88%E0%A6%96%E0%A6%BF%E0%A6%95_%E0%A6%A6%E0%A7%83%E0%A6%B6%E0%A7%8D%E0%A6%AF.jpg/330px-%E0%A6%93%E0%A6%B0%E0%A6%B2%E0%A6%BF%E0%A6%B0_%E0%A6%97%E0%A6%97%E0%A6%A8%E0%A6%B0%E0%A7%88%E0%A6%96%E0%A6%BF%E0%A6%95_%E0%A6%A6%E0%A7%83%E0%A6%B6%E0%A7%8D%E0%A6%AF.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-cyan">MUMBAI (INDE)</span><br>Tanker arrive avec brut saoudien via Ormuz<br>"Exemption" NON CONFIRMEE (Iran nie)<br>Discussions Jaishankar-Araghchi<br>70-75% imports maintenant hors Ormuz<br>Waiver 30j petrole russe (Trump)');
+
+  // Sanaa (Houthis)
+  mk(15.37, 44.19, '#eab308', 6,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Sana%27a_%282286825748%29.jpg/330px-Sana%27a_%282286825748%29.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-yellow">SANAA (YEMEN / HOUTHIS)</span><br>"Nos mains sont sur la gachette" (al-Houthi)<br>Toujours PAS attaque (J13)<br>Calcul: gerent un etat (ports, impots)<br>Officials: "attaqueront bientot"<br>Si entrent: Bab el-Mandeb ferme aussi');
+
+  // Bab el-Mandeb
+  mk(12.6, 43.3, '#06b6d4', 6,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Bab-el-Mandeb%2C_outer_space.jpg/330px-Bab-el-Mandeb%2C_outer_space.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span class="pop-cyan">BAB EL-MANDEB / MER ROUGE</span><br>2 fregates FR (Op. Aspides)<br>Houthis: "mains sur la gachette"<br>Pas encore attaque (J13)<br>Si entrent: double crise maritime');
+
+  // Chokepoints markers
+  mk(30.5, 32.3, '#94a3b8', 5,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Iss016e019375.jpg/330px-Iss016e019375.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span style="color:var(--text2);font-weight:700;">CANAL DE SUEZ</span><br>Ford CSG transite le 5 mars<br>Point de passage critique Atlantique → Mer Rouge');
+
+  mk(36.0, -5.4, '#94a3b8', 5,
+    '<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/STS059-238-074_Strait_of_Gibraltar.jpg/330px-STS059-238-074_Strait_of_Gibraltar.jpg\" style=\"width:100%;border-radius:6px;margin-bottom:8px;\">' +
+    '<span style="color:var(--text2);font-weight:700;">DETROIT DE GIBRALTAR</span><br>Point d\'entree Med pour flottes US/UK/FR<br>Ford + Dragon + CdG tous passes ici');
+
+  // =========================================
+  //  ROUTES DE TRANSIT ALLIEES (cyan dashes)
+  // =========================================
+  _ly = lyRoutes;
+
+  // USS Lincoln: San Diego -> Hawaii -> Guam -> Malacca -> Indian Ocean -> Arabian Sea
+  line([
+    [32.7, -117.2], [21.3, -157.8], [13.4, 144.8],
+    [1.3, 103.8], [5.0, 80.0], [15.0, 68.0], [23.0, 62.0]
+  ], '#06b6d4', '10,6');
+
+  // USS Ford: Norfolk -> Gibraltar -> Med -> Suez -> Red Sea
+  line([
+    [36.9, -76.3], [36.0, -5.4], [35.5, 15.0],
+    [33.0, 28.0], [30.5, 32.3], [27.5, 34.0], [20.0, 38.5]
+  ], '#06b6d4', '10,6');
+
+  // USS Bush: Norfolk -> (planned route, shorter dash)
+  line([
+    [36.9, -76.3], [38.0, -40.0], [36.0, -5.4]
+  ], '#06b6d4', '4,8');
+
+  // Charles de Gaulle: Baltic -> North Sea -> Channel -> Biscay -> Gibraltar -> Med Est
+  line([
+    [58.0, 18.0], [56.0, 8.0], [50.5, -1.0],
+    [45.0, -5.0], [36.0, -5.4], [36.5, 15.0], [34.5, 33.0]
+  ], '#06b6d4', '10,6');
+
+  // HMS Dragon: Portsmouth -> Gibraltar -> Med (in transit)
+  line([
+    [50.8, -1.1], [36.0, -5.4], [36.0, 10.0]
+  ], '#06b6d4', '6,6');
+  // Dragon planned continuation to Cyprus
+  line([
+    [36.0, 10.0], [34.9, 33.5]
+  ], '#06b6d4', '3,8');
+
+  // EUNAVFOR Aspides: Med -> Suez -> Red Sea -> Bab el-Mandeb -> Gulf of Oman (planned escort route)
+  line([
+    [34.5, 33.0], [30.5, 32.3], [20.0, 38.5],
+    [13.5, 43.5], [12.6, 43.3], [14.0, 52.0], [22.0, 59.5], [25.5, 58.0]
+  ], '#22c55e', '4,6');
+
+  // Planned escort corridor: Gulf of Oman -> through Hormuz -> Persian Gulf
+  line([
+    [25.5, 58.0], [26.3, 56.8], [26.5, 56.2], [26.8, 55.5], [26.5, 53.0]
+  ], '#22c55e', '3,4');
+
+  // =========================================
+  //  ANNOTATIONS: LIGNES D'ATTAQUE (orange)
+  // =========================================
+  _ly = lyAttackLines;
+  // Iran -> Israel
+  line([[35.69, 51.39], [33.89, 35.50]], '#f97316', '8,6');
+  line([[35.69, 51.39], [32.08, 34.78]], '#f97316', '8,6');
+
+  // Iran -> Gulf states
+  line([[35.69, 51.39], [26.23, 50.62]], '#f97316', '6,4');
+  line([[35.69, 51.39], [25.12, 51.31]], '#f97316', '6,4');
+  line([[35.69, 51.39], [25.20, 55.27]], '#f97316', '6,4');
+  line([[35.69, 51.39], [29.07, 48.10]], '#f97316', '6,4');
+
+  // Hezbollah -> Israel
+  line([[33.89, 35.50], [32.79, 35.00]], '#f97316', '4,4');
+  line([[33.89, 35.50], [32.08, 34.78]], '#f97316', '4,4');
+
+  // =========================================
+  //  LAYER CONTROL (coin haut-droit)
+  // =========================================
+  L.control.layers(null, {
+    '<span style="color:#ef4444">&#9679;</span> Sites Iran frappes': lyIranStrikes,
+    '<span style="color:#a855f7">&#9679;</span> Nucleaire': lyNuclear,
+    '<span style="color:#3b82f6">&#9679;</span> Bases US/Coalition': lyUSBases,
+    '<span style="color:#06b6d4">&#9679;</span> Flottes alliees': lyAlliedFleet,
+    '<span style="color:#22c55e">&#9679;</span> Energie/Bypass': lyEnergy,
+    '<span style="color:#eab308">&#9679;</span> Navires/Mines': lyShips,
+    '<span style="color:#f97316">&#9679;</span> Liban/Israel': lyLebanon,
+    '<span style="color:#06b6d4">---</span> Routes transit': lyRoutes,
+    '<span style="color:#f97316">---</span> Lignes attaque': lyAttackLines,
+    '<span style="color:#94a3b8">&#9679;</span> International': lyOther
+  }, {collapsed: true, position: 'topright'}).addTo(map);
+
+  // ===== ZOOM TEHRAN button =====
+  var zoomBtn = L.control({position: 'topleft'});
+  zoomBtn.onAdd = function() {
+    var d = L.DomUtil.create('div', 'leaflet-bar');
+    d.innerHTML = '<a href="#" title="Zoom Tehran" style="background:var(--bg2);color:var(--text);width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:14px;text-decoration:none;border:1px solid var(--border);border-radius:4px;">T</a>';
+    d.onclick = function(e) { e.preventDefault(); map.flyTo([35.72, 51.40], 11, {duration: 1}); };
+    L.DomEvent.disableClickPropagation(d);
+    return d;
+  };
+  zoomBtn.addTo(map);
+
+  // =========================================
+  //  LEGENDE (coin bas-gauche)
+  // =========================================
+  var legend = L.control({position: 'bottomleft'});
+  legend.onAdd = function() {
+    var d = L.DomUtil.create('div');
+    d.style.cssText = 'background:rgba(15,15,20,0.9);padding:10px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);font-size:11px;line-height:1.7;color:#cbd5e1;';
+    d.innerHTML =
+      '<strong style="color:#f1f5f9;font-size:12px;">LEGENDE</strong><br>' +
+      '<span style="color:#ef4444;">&#9679;</span> Sites iraniens frappes<br>' +
+      '<span style="color:#a855f7;">&#9679;</span> Sites nucleaires / civils<br>' +
+      '<span style="color:#3b82f6;">&#9679;</span> Bases US/Coalition (fixes)<br>' +
+      '<span style="color:#06b6d4;">&#9679;</span> Flottes alliees (mobiles)<br>' +
+      '<span style="color:#22c55e;">&#9679;</span> Infrastructure energie / bypass<br>' +
+      '<span style="color:#eab308;">&#9679;</span> Navires attaques / Houthis<br>' +
+      '<span style="color:#f97316;">&#9679;</span> Israel / Liban / frappes<br>' +
+      '<span style="color:#94a3b8;">&#9679;</span> Chokepoints / neutres<br>' +
+      '<span style="color:#06b6d4;">- - -</span> Routes transit alliees<br>' +
+      '<span style="color:#22c55e;">- - -</span> Corridor escorte (planifie)<br>' +
+      '<span style="color:#f97316;">- - -</span> Trajectoires d\'attaque';
+    return d;
+  };
+  legend.addTo(map);
+
+})();
+</script>
+
+<!-- ===== DASHBOARD INTERACTIONS ===== -->
+<script>
+(function(){
+  // ===== J: DATA OBJECT (key metrics for programmatic updates) =====
+  window.WAR_DATA = {
+    day: 13,
+    lastUpdate: '12 mars 2026, 16:00 EST',
+    brent: { current: 101.20, history: [71, 72, 78, 83, 87, 90, 93, 98, 105, 119, 103, 87.80, 91.98, 101.20] },
+    vix:   { current: 27.29, history: [15, 16, 18, 20, 21, 22, 23, 24, 26, 28, 25, 22, 24, 27.29] },
+    gold:  { current: 5079, history: [2870, 2900, 3100, 3400, 3800, 4100, 4400, 4700, 5000, 5200, 5170, 5100, 5174, 5079] },
+    hormuz: { blocked: 97, shipsTrapped: 280, shipsAttacked: 22 },
+    targets: 6000,
+    civilianDeaths: 1348,
+    usDeaths: 7,
+    iranShips: 60,
+    displaced: 3.2,
+    missiles: { fired: 2410, stock: 2500 },
+    drones: 2000,
+    cyber: 150,
+    spr: 400
+  };
+
+  // ===== F: SPARKLINES =====
+  function sparkline(containerId, data, color) {
+    var el = document.getElementById(containerId);
+    if (!el || !data || data.length < 2) return;
+    var min = Math.min.apply(null, data), max = Math.max.apply(null, data);
+    var range = max - min || 1;
+    var w = 100, h = 20, step = w / (data.length - 1);
+    var pts = data.map(function(v, i) {
+      return (i * step).toFixed(1) + ',' + (h - ((v - min) / range) * (h - 2) - 1).toFixed(1);
+    });
+    var last = data[data.length - 1], prev = data[data.length - 2];
+    var dotColor = last >= prev ? '#22c55e' : '#ef4444';
+    el.innerHTML = '<svg viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="none">' +
+      '<polyline points="' + pts.join(' ') + '" fill="none" stroke="' + color + '" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>' +
+      '<circle cx="' + ((data.length - 1) * step) + '" cy="' + (h - ((last - min) / range) * (h - 2) - 1) + '" r="2.5" fill="' + dotColor + '"/>' +
+      '</svg>';
+  }
+  var D = window.WAR_DATA;
+  sparkline('spark-brent', D.brent.history, '#ef4444');
+  sparkline('spark-vix', D.vix.history, '#f97316');
+  sparkline('spark-gold', D.gold.history, '#22c55e');
+
+  // ===== B: COLLAPSIBLE CARDS =====
+  document.querySelectorAll('.card-header').forEach(function(hdr) {
+    if (hdr.getAttribute('data-no-collapse') === 'true') {
+      hdr.style.cursor = 'default';
+      hdr.classList.add('no-collapse');
+      return;
+    }
+    hdr.addEventListener('click', function(e) {
+      if (e.target.tagName === 'A') return;
+      var body = hdr.nextElementSibling;
+      if (!body || !body.classList.contains('card-body')) return;
+      var isCollapsed = body.classList.toggle('collapsed-body');
+      hdr.classList.toggle('collapsed', isCollapsed);
+    });
+  });
+
+  // ===== L: STICKY MINI HEADER (show on scroll past main header) =====
+  var miniH = document.getElementById('miniHeader');
+  var mainHeader = document.querySelector('.header');
+  if (miniH && mainHeader) {
+    var headerBottom = 0;
+    function updateHeaderPos() { headerBottom = mainHeader.getBoundingClientRect().height + mainHeader.offsetTop + 100; }
+    updateHeaderPos();
+    window.addEventListener('scroll', function() {
+      if (window.scrollY > headerBottom) {
+        miniH.classList.add('visible');
+      } else {
+        miniH.classList.remove('visible');
+      }
+    }, {passive: true});
+    window.addEventListener('resize', updateHeaderPos);
+  }
+
+  // ===== A: STICKY NAV ACTIVE STATE =====
+  var navLinks = document.querySelectorAll('.sticky-nav a');
+  var sections = [];
+  navLinks.forEach(function(link) {
+    var id = link.getAttribute('href').replace('#', '');
+    var sec = document.getElementById(id);
+    if (sec) sections.push({el: sec, link: link});
+  });
+  function updateActiveNav() {
+    var scrollY = window.scrollY + 120;
+    var active = null;
+    for (var i = sections.length - 1; i >= 0; i--) {
+      if (sections[i].el.offsetTop <= scrollY) { active = sections[i]; break; }
+    }
+    navLinks.forEach(function(l) { l.classList.remove('active'); });
+    if (active) active.link.classList.add('active');
+  }
+  window.addEventListener('scroll', updateActiveNav, {passive: true});
+  updateActiveNav();
+
+  // Smooth scroll for nav links
+  navLinks.forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      var target = document.getElementById(link.getAttribute('href').replace('#', ''));
+      if (target) target.scrollIntoView({behavior: 'smooth', block: 'start'});
+    });
+  });
+
+  // ===== G: OIL BAR TOOLTIPS =====
+  var oilEvents = [
+    'Pre-guerre: baseline',
+    'J1: Operation Epic Fury lancee',
+    'J2: IRGC ferme Ormuz',
+    'J3: Tir ami Koweit, 6 US tues',
+    'J4: Assemblee Experts bombee',
+    'J5: IRIS Dena torpillee',
+    'J6: Missiles -90%, Drones -83%',
+    'J7: "l\'Iran sera frappe tres fort"',
+    'J8: F-14 detruits, pas de ceasefire',
+    'J9 PEAK: Depots Teheran en feu! $119.50',
+    'J10: Trump "la guerre est complete"',
+    'J11: Mines Ormuz, Brent -11%',
+    'J12: IEA 400M barils, offensive Iran',
+    'J13: 6 navires, Parchin frappe, $101.20'
+  ];
+  document.querySelectorAll('.oil-bar-wrapper').forEach(function(wrapper, i) {
+    if (oilEvents[i]) {
+      var tip = document.createElement('div');
+      tip.className = 'oil-tooltip';
+      tip.innerHTML = oilEvents[i];
+      wrapper.appendChild(tip);
+    }
+  });
+
+  // ===== N: FRESHNESS auto-update =====
+  // Already set via HTML badges. This could be enhanced with JS for live time diff.
+
+  // ===== CSS FIX: hide collapse arrow on no-collapse cards =====
+  var style = document.createElement('style');
+  style.textContent = '.card-header.no-collapse::after { display: none; }';
+  document.head.appendChild(style);
+
+})();
+</script>
+
+</body>
+</html>
